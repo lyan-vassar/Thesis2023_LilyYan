@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Platformer v0</title>
+        <!--<script type="text/javascript" src="platformer_basic.js"></script>-->
+    </head>
+    <body>
+        <div id="game">
+            <script type="text/javascript" src="versions/platformer_gravity.js"></script>
+            <div id="intro">
+                <button type="button" id="startButton" onclick="start()">START</button>
+                <!--<img id="ghost" src="images/ghost.png" width="30" height="40" style="display:none"/>-->
+            </div>
+            <div id="timer"> Timer: 0</div>
+            <div id="end">
+                <button type="button" id="playAgain" onclick="start()" hidden>TRY AGAIN</button>
+            </div>
+            <canvas id="canvas"></canvas>
+        </div>
+    </body>
+</html>
