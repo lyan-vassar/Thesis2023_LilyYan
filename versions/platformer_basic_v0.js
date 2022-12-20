@@ -1,17 +1,3 @@
-/* KNOWN ISSUES LIST
-    * ladder glitches sometimes (will make player automatically go up) (sometimes it fixes itself? it's weird)
-    * collision functions are iffy --> MUST EDIT SOON
-    * spike placement on gravity levels should be better
-    
-
-    Things I'd like to clean up
-    * make stars look better (have to figure out what's wrong with my render fxn)
-    * make UI nicer
-    * maybe replace some elements with actual images instead of just shapes
-        * would i have to draw those myself??
-    * slow timer down
-*/
-
 // variables
 var player;
 var ground;
@@ -382,6 +368,7 @@ function isWin() {
 // function to display end screen
 function endScreen() {
     renderCanvas();
+    //playAgainButton.style.visibility = "visible";
 
     ctx.fillStyle = "black";
     ctx.font = "48px arial";
@@ -393,13 +380,11 @@ function endScreen() {
     else if (!isPlayerAlive) {
         ctx.fillText("You have died.", 50, 100);
         ctx.fillText("Please try again.", 50, 150);
-        playAgainButton.hidden = false;
     }
 
     else ctx.fillText("Incorrect sequence. Please try again.", 50, 100);
 
-    //playAgainButton.hidden = false;
-    //playAgainButton.removeAttribute("hidden");
+    playAgainButton.removeAttribute("hidden");
     //playAgainButton.style.visibility = "visible";
 }
 
@@ -407,9 +392,8 @@ function endScreen() {
 
 // ok here we go with the actual game
 function start() {
-    init();
     startButton.style.display = "none";
-    playAgainButton.hidden = true;
+    //playAgainButton.style.visibility = "hidden";
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
     ctx.canvas.height = 550;
@@ -488,15 +472,4 @@ function gameOver() { // if game is over
     cancelAnimationFrame(gameLoop);
     endScreen();
     init();
-}
-
-function isGameWon(){
-    //return (victoryCondition || !isPlayerAlive);
-    return victoryCondition;
-}
-
-var basicLevel = { // need start, render, gameloop?, end
-    start: start,
-    //loop: function(){},
-    gameWon: isGameWon
 }
