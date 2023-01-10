@@ -1,4 +1,4 @@
-/* 
+/* NUMBER 6: DIFFERENT KEY WIN
     * different key win
     * if you pick up the key, it doesn't unlock the door, but rather the ability
     * to destroy obstacles
@@ -25,15 +25,16 @@ var isPlayerAlive;
 var isOver;
 var victoryCondition;
 var playAgainButton;
+var successOneButton;
 var instructionsField;
 var timer;
 var timePassed = 0;
 
 
-window.addEventListener("load", init);
+window.addEventListener("load", init6);
 
-function init() {
-    startButton = document.getElementById("startButton");
+function init6() {
+    //startButton = document.getElementById("startButton");
     player = {
         x: 300,
         y: 200,
@@ -95,29 +96,30 @@ function init() {
     victoryCondition = false;
     timer = document.getElementById("timer");
     playAgainButton = document.getElementById("playAgain");
+    successOneButton = document.getElementById("successOne");
 
 }
 
 // render canvas
-function renderCanvas() {
+function renderCanvas6() {
     ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, 1000, 550);
+    ctx.fillRect(0, 0, 550, 450);
 }
 
 // render player
-function renderPlayer() {
+function renderPlayer6() {
     ctx.fillStyle = "#F08080";
     ctx.fillRect((player.x)-25, (player.y)-25, player.width, player.height);
 }
 
 // render ladder
-function renderLadder() {
+function renderLadder6() {
     ctx.fillStyle = "brown";
     ctx.fillRect(ladder.x, ladder.y, ladder.width, ladder.height);
 }
 
 // render starkey
-function renderStarKey() {
+function renderStarKey6() {
     if (!starkey.collected) {
         var rot = Math.PI / 2 * 3;
         var pointX = starkey.x;
@@ -150,13 +152,13 @@ function renderStarKey() {
 }
 
 // render door
-function renderDoor() {
+function renderDoor6() {
     ctx.fillStyle = "green";
     ctx.fillRect(door.x, door.y, door.width, door.height);
 }
 
 // create spikes
-function createSpikes() {
+function createSpikes6() {
     // spike on first platform
     spikes.push({x: 230, y: 200, width: 20, height: 25, destroyed: false});
 
@@ -165,7 +167,7 @@ function createSpikes() {
 }
 
 // render spikes
-function renderSpikes() {
+function renderSpikes6() {
     for (ctr=0; ctr<spikes.length; ctr++) {
         if (!spikes[ctr].destroyed) {
             ctx.strokeSyle = "#000";
@@ -188,13 +190,13 @@ function renderSpikes() {
 
 
 // render ground
-function renderGround() {
+function renderGround6() {
     ctx.fillStyle = "black";
     ctx.fillRect(ground.x, ground.y, ground.width, ground.height);
 }
 
 // create platforms
-function createPlatforms() {
+function createPlatforms6() {
     // first platform
     platforms.push({x: 200, y: 200, width: 110, height: 15, color: "steelblue"});
 
@@ -209,7 +211,7 @@ function createPlatforms() {
 }
 
 // render platforms
-function renderPlatforms() {
+function renderPlatforms6() {
     for (ctr=0; ctr<numPlatforms; ctr++) {
         ctx.fillStyle = platforms[ctr].color;
         ctx.fillRect(platforms[ctr].x, platforms[ctr].y, platforms[ctr].width, platforms[ctr].height);
@@ -280,7 +282,7 @@ function keyUp(e) {
 }
 
 // function to check for collisions
-function checkCollisions() {
+function checkCollisions6() {
     ans = false;
     index = -1;
 
@@ -305,7 +307,7 @@ function checkCollisions() {
 }
 
 // function for climbing the ladder
-function checkLadderClimb() {
+function checkLadderClimb6() {
     if (ladder.x < player.x && player.x < ladder.x + ladder.width &&
         ladder.y < player.y && player.y < ladder.y + ladder.height) {
             player.climb = true;
@@ -318,7 +320,7 @@ function checkLadderClimb() {
 }
 
 // function for collecting the starkey
-function checkKeyCollection() {
+function checkKeyCollection6() {
     if (starkey.x < player.x && player.x < starkey.x+(starkey.outerRadius*2) &&
         starkey.y < player.y && player.y < starkey.y+(starkey.outerRadius*2)) {
             starkey.collected = true;
@@ -327,7 +329,7 @@ function checkKeyCollection() {
 }
 
 // function to check if door is reached
-function openDoor() {
+function openDoor6() {
     if (door.x < player.x && player.x < door.x + door.width &&
         door.y < player.y && player.y < door.y + door.height &&
         door.unlocked) {
@@ -336,7 +338,7 @@ function openDoor() {
 }
 
 // function to check if player died
-function playerAlive() {
+function playerAlive6() {
     hazardCollided = false;
 
     // test for enemy collision
@@ -364,8 +366,8 @@ function playerAlive() {
 }
 
 // function to display end screen
-function endScreen() {
-    renderCanvas();
+function endScreen6() {
+    renderCanvas6();
     //playAgainButton.style.visibility = "visible";
 
     ctx.fillStyle = "black";
@@ -373,55 +375,58 @@ function endScreen() {
     ctx.textBaseline = "middle";
     if (victoryCondition) {
         ctx.fillText("Success!", 50, 100);
+        successOneButton.hidden = false;
     }
 
     else if (!isPlayerAlive) {
         ctx.fillText("You have died.", 50, 100);
         ctx.fillText("Please try again.", 50, 150);
+        playAgainButton.hidden = false;
     }
 
     else ctx.fillText("Incorrect sequence. Please try again.", 50, 100);
 
-    playAgainButton.removeAttribute("hidden");
+    //playAgainButton.removeAttribute("hidden");
     //playAgainButton.style.visibility = "visible";
 }
 
 
 
 // ok here we go with the actual game
-function start() {
-    startButton.style.display = "none";
-    //playAgainButton.style.visibility = "hidden";
+function start6() {
+    init6();
+    //startButton.style.display = "none";
+    playAgainButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
-    ctx.canvas.height = 550;
-    ctx.canvas.width = 1000;
-    createPlatforms();
-    createSpikes();
+    ctx.canvas.height = 450;
+    ctx.canvas.width = 550;
+    createPlatforms6();
+    createSpikes6();
     document.addEventListener("keydown",keyDown);
     document.addEventListener("keyup",keyUp);
     timePassed = 0;
 
-    window.requestAnimationFrame(gameLoop);
+    window.requestAnimationFrame(gameLoop6);
 }
 
-function startAgain() {
-    playAgainButton.style.visibility = "hidden";
-    renderCanvas();
-    //window.requestAnimationFrame(gameLoop);
+function startAgain6() {
+    playAgainButton.hidden = true;
+    renderCanvas6();
+    //window.requestAnimationFrame(gameLoop6);
 }
 
-function gameLoop(timeStamp) {
+function gameLoop6(timeStamp) {
     // render everything
-    renderCanvas();
-    renderLadder();
-    renderPlayer();
-    renderStarKey();
-    renderDoor();
-    renderGround();
-    renderSpikes();
-    renderPlatforms();
-    checkLadderClimb();
+    renderCanvas6();
+    renderLadder6();
+    renderPlayer6();
+    renderStarKey6();
+    renderDoor6();
+    renderGround6();
+    renderSpikes6();
+    renderPlatforms6();
+    checkLadderClimb6();
     timePassed += Math.round(timeStamp / 1000);
     timer.innerHTML = "Timer: " + timePassed;
 
@@ -450,23 +455,29 @@ function gameLoop(timeStamp) {
     player.y += player.y_v;
 
     // check for collisions with platform
-    checkCollisions();
-    checkKeyCollection();
-    playerAlive();
+    checkCollisions6();
+    checkKeyCollection6();
+    playerAlive6();
 
     // if win condition is met, end game
-    openDoor();
+    openDoor6();
 
-    if (victoryCondition || !isPlayerAlive || isOver) gameOver();
+    if (victoryCondition || !isPlayerAlive || isOver) gameOver6();
 
-    else window.requestAnimationFrame(gameLoop);
+    else window.requestAnimationFrame(gameLoop6);
 }
 
-function gameOver() {
-    cancelAnimationFrame(gameLoop);
-    endScreen();
-    init();
+function gameOver6() {
+    cancelAnimationFrame(gameLoop6);
+    endScreen6();
+    init6();
 }
 
-
+var difKeyLevel = { // need start, render, gameloop?, end
+    type: jsPsychGame,
+    start: start6,
+    //loop: function(){},
+    gameWon: isGameWon,
+    verName: "difKey"
+}
 

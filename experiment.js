@@ -1,5 +1,16 @@
 // Loads jsPsych
-var jsPsych = initJsPsych({});
+//var jsPsych = initJsPsych({});
+var jsPsych = initJsPsych({
+    on_finish: function() {
+      jsPsych.data.displayData();
+    }
+  });
+
+window.addEventListener("keydown", function(e) {
+    if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
+        e.preventDefault();
+    }
+}, false);
 
 // Timeline that holds javascript variables (instructioins, stimuli) to appear in chronological order 
 var timeline = [];
@@ -15,15 +26,20 @@ jsPsych.data.addProperties({
     session_id: session_id
 });
 
-//var levelVersion = [basic];
+var levels = [sequenceWinLevel, sequenceWinLevel];
+var levelSurveys = [sequenceWinLevelSurvey, sequenceWinLevelSurvey];
 
-// line to randomly choose what version a subject gets 
+// Randomly chooses version the subject gets
 //var versionNum = jsPsych.randomization.sampleWithoutReplacement([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 1)[0];
+var versionNum = jsPsych.randomization.sampleWithoutReplacement([0, 1], 1)[0];
+
+var currLevel = levels[versionNum];
+var levelPrompt = levelSurveys[versionNum];
 
 // will add version number to data frame
-/*jsPsych.data.addProperties({
-    version: versionNum,
-});*/
+jsPsych.data.addProperties({
+    version: versionNum
+});
 
 var welcome = {
     type: jsPsychHtmlKeyboardResponse,
@@ -43,10 +59,19 @@ var instructions = {
 
 timeline.push(instructions);
 
-var trial = {
+var trialPt1 = {
     type: jsPsychGame,
-    start: basicLevel.start,
-    gameWon: basicLevel.gameWon
+    start: currLevel.start,
+    gameWon: currLevel.gameWon,
+    verName: currLevel.verName
+}
+
+var trialPt2 = {
+    type: jsPsychGameSurvey,
+    start: currLevel.start,
+    gameWon: currLevel.gameWon,
+    verName: currLevel.verName,
+    questions: currLevel.questions
 }
 
 /*attempt at normal version
@@ -58,7 +83,25 @@ var trial = {
     }
 }*/
 
-timeline.push(trial);
+console.log(currLevel);
+timeline.push(currLevel);
+timeline.push(levelPrompt);
+
+// Saves data
+var save_server_data = {
+    type: jsPsychCallFunction,
+    func: function () {
+      var data = jsPsych.data.get().json();
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', 'php/save_json.php');
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.send(JSON.stringify({ filedata: data }));
+      jsPsych.data.get().localSave('csv','mydata.csv');
+    },
+    post_trial_gap: 1000
+  }
+
+timeline.push(save_server_data);
 
 var debrief_block = {
     type: jsPsychHtmlKeyboardResponse,

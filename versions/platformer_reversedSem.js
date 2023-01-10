@@ -1,6 +1,11 @@
-/* TO DO LIST:
+/* NUMBER 3: REVERSED SEMANTICS
+
+TO DO LIST:
     * reversed semantics
-    * let's see if we can get the images to work lmao
+    * the spikes will be stars
+    * the star will be foe (just gotta get THIS png to work)
+    * the door will be spike
+    * would love for the ladder to look like a row of fires or something, but that's only if i can get the png to work
 */
 
 // variables
@@ -10,6 +15,7 @@ var numPlatforms;
 var platforms;
 var ladder;
 var starkey;
+const ghost = new Image();
 var door;
 var keys;
 var spikes;
@@ -22,15 +28,16 @@ var isPlayerAlive;
 var isOver;
 var victoryCondition;
 var playAgainButton;
+var successOneButton;
 var instructionsField;
 var timer;
 var timePassed = 0;
 
 
-window.addEventListener("load", init);
+window.addEventListener("load", init3);
 
-function init() {
-    startButton = document.getElementById("startButton");
+function init3() {
+    //startButton = document.getElementById("startButton");
     player = {
         x: 300,
         y: 200,
@@ -49,6 +56,17 @@ function init() {
         height: 110
     }
 
+    ghost.src = "images/ghost.png";
+    starkey = { // now a ghost/foe
+        image: ghost,
+        x: 150, 
+        y: 15,
+        width: 30,
+        height: 30,
+        collected: false
+    }
+
+    /* original starkey 
     starkey = {
         x: 170,
         y: 30,
@@ -56,15 +74,24 @@ function init() {
         outerRadius: 20,
         innerRadius: 10,
         collected: false
-    };
+    };*/
 
+    /* original door
     door = {
         x: 340,
         y: 85,
         width: 30, 
         height: 40,
         unlocked: false
-    };
+    };*/
+
+    door = {// now a spike
+        x: 340, 
+        y: 125, 
+        width: 20, 
+        height: 25,
+        unlocked: false
+    }
 
     ground = {
         x: 0,
@@ -92,92 +119,97 @@ function init() {
     victoryCondition = false;
     timer = document.getElementById("timer");
     playAgainButton = document.getElementById("playAgain");
+    successOneButton = document.getElementById("successOne");
 
 }
 
 // render canvas
-// this is taken from educate.io
-function renderCanvas() {
-    //ctx.fillStyle = "#F0F8FF";
+function renderCanvas3() {
     ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, 1000, 550);
+    ctx.fillRect(0, 0, 550, 450);
 }
 
 // render player
-// this is taken from educate.io
-function renderPlayer() {
+function renderPlayer3() {
     ctx.fillStyle = "#F08080";
     ctx.fillRect((player.x)-25, (player.y)-25, player.width, player.height);
 }
 
 // render ladder
-function renderLadder() {
+function renderLadder3() {
     ctx.fillStyle = "brown";
     ctx.fillRect(ladder.x, ladder.y, ladder.width, ladder.height);
 }
 
 // render starkey
-function renderStarKey() {
-    if (!starkey.collected) {
-        var rot = Math.PI / 2 * 3;
-        var pointX = starkey.x;
-        var pointY = starkey.y;
-        var step = Math.PI / starkey.spikes;
+function renderStarKey3() {
+    // png render
+    ctx.drawImage(starkey.image, starkey.x, starkey.y, starkey.width, starkey.height);
+}
+
+// render door
+function renderDoor3() {
+    /*ctx.fillStyle = "green";
+    ctx.fillRect(door.x, door.y, door.width, door.height);*/
+    ctx.strokeSyle = "#000";
+    ctx.beginPath();
+    ctx.moveTo(door.x, door.y);
+    ctx.lineTo(door.x+(door.width/2), door.y-door.height);
+    ctx.lineTo(door.x+door.width, door.y);
+    ctx.lineTo(door.x, door.y);
+    ctx.closePath();
+    ctx.lineWidth=5;
+    ctx.strokeStyle="silver";
+    ctx.stroke();
+    ctx.fillStyle = "silver";
+    ctx.fill();
+}
+
+// create spikes
+function createSpikes3() {
+    /* original
+    // spike on first platform
+    spikes.push({x: 230, y: 200, width: 20, height: 25});
+
+    // spike on starkey platform
+    spikes.push({x: 215, y: 50, width: 20, height: 25});*/
+
+    // spikes are now stars
+    spikes.push({x: 230, y: 180, spokes: 5, outerRadius: 15,innerRadius: 7.5, collected: false})
+
+    spikes.push({x: 215, y: 30, spokes: 5, outerRadius: 15, innerRadius: 7.5, collected: false})
+
+}
+
+// render spikes
+function renderSpikes3() {
+    var rot = Math.PI / 2 * 3;
+    var step = Math.PI / 5;
+
+    for (ctr=0; ctr<spikes.length; ctr++) {
+        pointX = spikes[ctr].x;
+        pointY = spikes[ctr].y;
 
         ctx.strokeSyle = "#000";
         ctx.beginPath();
-        ctx.moveTo(pointX, pointY - starkey.outerRadius)
-        for (i = 0; i < starkey.spikes; i++) {
-            pointX = starkey.x + Math.cos(rot) * starkey.outerRadius;
-            pointY = starkey.y + Math.sin(rot) * starkey.outerRadius;
+        ctx.moveTo(pointX, pointY - spikes[ctr].outerRadius)
+        for (i = 0; i < spikes[ctr].spokes; i++) {
+            pointX = spikes[ctr].x + Math.cos(rot) * spikes[ctr].outerRadius;
+            pointY = spikes[ctr].y + Math.sin(rot) * spikes[ctr].outerRadius;
             ctx.lineTo(pointX, pointY);
             rot += step;
 
-            pointX = starkey.x + Math.cos(rot) * starkey.innerRadius;
-            pointY = starkey.y + Math.sin(rot) * starkey.innerRadius;
+            pointX = spikes[ctr].x + Math.cos(rot) * spikes[ctr].innerRadius;
+            pointY = spikes[ctr].y + Math.sin(rot) * spikes[ctr].innerRadius;
             ctx.lineTo(pointX, pointY);
             rot += step;
         }
-        ctx.lineTo(pointX, pointY - starkey.outerRadius)
+        ctx.lineTo(pointX, pointY - spikes[ctr].outerRadius)
         ctx.closePath();
         ctx.lineWidth=5;
         ctx.strokeStyle="gold";
         ctx.stroke();
         ctx.fillStyle="gold";
-        ctx.fill();
-    }
-
-}
-
-// render door
-function renderDoor() {
-    ctx.fillStyle = "green";
-    ctx.fillRect(door.x, door.y, door.width, door.height);
-}
-
-// create spikes
-function createSpikes() {
-    // spike on first platform
-    spikes.push({x: 230, y: 200, width: 20, height: 25});
-
-    // spike on starkey platform
-    spikes.push({x: 215, y: 50, width: 20, height: 25});
-}
-
-// render spikes
-function renderSpikes() {
-    for (ctr=0; ctr<spikes.length; ctr++) {
-        ctx.strokeSyle = "#000";
-        ctx.beginPath();
-        ctx.moveTo(spikes[ctr].x, spikes[ctr].y);
-        ctx.lineTo(spikes[ctr].x+(spikes[ctr].width/2), spikes[ctr].y-spikes[ctr].height);
-        ctx.lineTo(spikes[ctr].x+spikes[ctr].width, spikes[ctr].y);
-        ctx.lineTo(spikes[ctr].x, spikes[ctr].y);
-        ctx.closePath();
-        ctx.lineWidth=5;
-        ctx.strokeStyle="silver";
-        ctx.stroke();
-        ctx.fillStyle = "silver";
         ctx.fill();
     }
 }
@@ -186,13 +218,13 @@ function renderSpikes() {
 
 
 // render ground
-function renderGround() {
+function renderGround3() {
     ctx.fillStyle = "black";
     ctx.fillRect(ground.x, ground.y, ground.width, ground.height);
 }
 
 // create platforms
-function createPlatforms() {
+function createPlatforms3() {
     // first platform
     platforms.push({x: 200, y: 200, width: 110, height: 15, color: "steelblue"});
 
@@ -207,18 +239,15 @@ function createPlatforms() {
 }
 
 // render platforms
-function renderPlatforms() {
-    //ctx.fillStyle = "#45597E";
+function renderPlatforms3() {
     for (ctr=0; ctr<numPlatforms; ctr++) {
         ctx.fillStyle = platforms[ctr].color;
         ctx.fillRect(platforms[ctr].x, platforms[ctr].y, platforms[ctr].width, platforms[ctr].height);
     }
-    //ctx.fillRect(platforms[0].x, platforms[0].y, platforms[0].width, platforms[0].height);
-    //ctx.fillRect(platforms[1].x, platforms[1].y, platforms[1].width,platforms[1]. height);
 }
 
 // function for when a key is pressed
-function keyDown(e) {
+function keyDown3(e) {
     // left arrow key = 37
     if (e.keyCode == 37) {
         keys.left = true;
@@ -227,12 +256,11 @@ function keyDown(e) {
     // up arrow key = 38
     if (e.keyCode == 38) {
         if (!player.jump) {
-            player.y_v = -10; // not fully sure what this is doing
+            player.y_v = -10; 
         }
 
         if (player.climb) {
             keys.up = true;
-            //player.y_v = 2.5;
         }
     }
 
@@ -240,7 +268,6 @@ function keyDown(e) {
     if (e.keyCode == 40) {
         if (player.climb) {
             keys.down = true;
-            //player.y_v = 2.5;
         }
     }
 
@@ -251,7 +278,7 @@ function keyDown(e) {
 }
 
 // function for when a key is released
-function keyUp(e) {
+function keyUp3(e) {
     // left arrow key
     if (e.keyCode == 37) {
         keys.left = false;
@@ -260,7 +287,7 @@ function keyUp(e) {
     // up arrow key
     if (e.keyCode == 38) {
         if (player.y_v < -2 && !player.climb) {
-            player.y_v = -3; // not fully sure about this either?
+            player.y_v = -3; 
         }
         if (player.climb) {
             player.y_v = 0;
@@ -283,7 +310,7 @@ function keyUp(e) {
 }
 
 // function to check for collisions
-function checkCollisions() {
+function checkCollisions3() {
     ans = false;
     index = -1;
 
@@ -308,7 +335,7 @@ function checkCollisions() {
 }
 
 // function for climbing the ladder
-function checkLadderClimb() {
+function checkLadderClimb3() {
     if (ladder.x < player.x && player.x < ladder.x + ladder.width &&
         ladder.y < player.y && player.y < ladder.y + ladder.height) {
             player.climb = true;
@@ -321,25 +348,33 @@ function checkLadderClimb() {
 }
 
 // function for collecting the starkey
-function checkKeyCollection() {
-    if (starkey.x < player.x && player.x < starkey.x+(starkey.outerRadius*2) &&
-        starkey.y < player.y && player.y < starkey.y+(starkey.outerRadius*2)) {
+function checkKeyCollection3() {
+    /*if (starkey.x < player.x && player.x < starkey.x+starkey.width &&
+        starkey.y < player.y && player.y < starkey.y+starkey.height) {
+            starkey.collected = true;
+            door.unlocked = true;
+        }*/
+
+    if (((starkey.x < player.x && player.x-player.width < starkey.x) || 
+        (starkey.x+starkey.width > player.x-player.width && player.x > starkey.x+starkey.width)) &&
+        starkey.y-starkey.height < player.y && player.y <= starkey.y) {
             starkey.collected = true;
             door.unlocked = true;
         }
 }
 
 // function to check if door is reached
-function openDoor() {
-    if (door.x < player.x && player.x < door.x + door.width &&
-        door.y < player.y && player.y < door.y + door.height &&
+function openDoor3() {
+    if (((door.x < player.x && player.x-player.width < door.x) || 
+        (door.x+door.width > player.x-player.width && player.x > door.x+door.width)) &&
+        door.y-door.height < player.y && player.y <= door.y &&
         door.unlocked) {
             victoryCondition = true;
         }
 }
 
 // function to check if player died
-function playerAlive() {
+function playerAlive3() {
     hazardCollided = false;
     index = 0;
 
@@ -347,45 +382,29 @@ function playerAlive() {
 
     // test for spike collision
     for (ctr=0; ctr<spikes.length; ctr++) {
-        /*if (spikes[ctr].x < player.x && player.x < spikes[ctr].x+spikes[ctr].width &&
-            spikes[ctr].y < player.y && player.y < spikes[ctr].y-spikes[ctr].height) {
-                hazardCollided = true;
-                break;
-            }*/
-
+        /*
         if (((spikes[ctr].x < player.x && player.x-player.width < spikes[ctr].x) || 
             (spikes[ctr].x+spikes[ctr].width > player.x-player.width && player.x > spikes[ctr].x+spikes[ctr].width)) &&
             spikes[ctr].y-spikes[ctr].height < player.y && player.y <= spikes[ctr].y) {
                 hazardCollided = true;
                 index = ctr;
                 break;
-            }
+            }*/
+        
+        if (spikes[ctr].x < player.x && player.x < spikes[ctr].x+(spikes[ctr].outerRadius*2) &&
+            spikes[ctr].y < player.y && player.y < spikes[ctr].y+(spikes[ctr].outerRadius*2)) {
+                hazardCollided = true;
+                index = ctr;
+                break;
+        }
     }
 
     isPlayerAlive = !hazardCollided;
-    //console.log(index, spikes[index].y-spikes[index].height, player.y, spikes[index].y);
-
-}
-
-// function to check win condition
-function isWin() {
-    ans = true;
-    if (currentSequence.length == winSequence.length) {
-        isOver = true;
-
-        for (ctr=0; ctr<currentSequence.length; ctr++) {
-            if (currentSequence[ctr] != winSequence[ctr]) {
-                ans = false;
-                break;
-            }
-        }
-        victoryCondition = ans;
-    }
 }
 
 // function to display end screen
-function endScreen() {
-    renderCanvas();
+function endScreen3() {
+    renderCanvas3();
     //playAgainButton.style.visibility = "visible";
 
     ctx.fillStyle = "black";
@@ -393,67 +412,56 @@ function endScreen() {
     ctx.textBaseline = "middle";
     if (victoryCondition) {
         ctx.fillText("Success!", 50, 100);
+        successOneButton.hidden = false;
     }
 
     else if (!isPlayerAlive) {
         ctx.fillText("You have died.", 50, 100);
         ctx.fillText("Please try again.", 50, 150);
+        playAgainButton.hidden = false;
     }
 
     else ctx.fillText("Incorrect sequence. Please try again.", 50, 100);
-
-    playAgainButton.removeAttribute("hidden");
-    //playAgainButton.style.visibility = "visible";
 }
 
 
 
 // ok here we go with the actual game
-function start() {
-    startButton.style.display = "none";
-    //playAgainButton.style.visibility = "hidden";
+function start3() {
+    init3();
+    //startButton.style.display = "none";
+    playAgainButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
-    ctx.canvas.height = 550;
-    ctx.canvas.width = 1000;
-    createPlatforms();
-    createSpikes();
-    //createCoins();
-    document.addEventListener("keydown",keyDown);
-    document.addEventListener("keyup",keyUp);
-    //setInterval(gameLoop,22);
+    ctx.canvas.height = 450;
+    ctx.canvas.width = 550;
+    createPlatforms3();
+    createSpikes3();
+    document.addEventListener("keydown",keyDown3);
+    document.addEventListener("keyup",keyUp3);
     timePassed = 0;
 
-    window.requestAnimationFrame(gameLoop);
-
-    /*instructionsField = document.createElement("textarea");
-    instructionsField.setAttribute("value", "Hello World!");
-    instructionsField.style.position = "absolute";
-    instructionsField.style.height = "200px";
-    instructionsField.style.left = "500px";
-    instructionsField.style.top = "10px";
-    document.body.appendChild(instructionsField);*/
-
+    window.requestAnimationFrame(gameLoop3);
 }
 
-function startAgain() {
-    playAgainButton.style.visibility = "hidden";
-    renderCanvas();
-    //window.requestAnimationFrame(gameLoop);
+function startAgain3() {
+    playAgainButton.hidden = true;
+    renderCanvas3();
+    //window.requestAnimationFrame(gameLoop3);
+    timePassed = 0;
 }
 
-function gameLoop(timeStamp) {
+function gameLoop3(timeStamp) {
     // render everything
-    renderCanvas();
-    renderLadder();
-    renderPlayer();
-    renderStarKey();
-    renderDoor();
-    renderGround();
-    renderSpikes();
-    renderPlatforms();
-    //renderCoins();
-    checkLadderClimb();
+    renderCanvas3();
+    renderLadder3();
+    renderPlayer3();
+    renderDoor3();
+    renderGround3();
+    renderSpikes3();
+    renderPlatforms3();
+    if (!starkey.collected) renderStarKey3();
+    checkLadderClimb3();
     timePassed += Math.round(timeStamp / 1000);
     timer.innerHTML = "Timer: " + timePassed;
 
@@ -473,16 +481,6 @@ function gameLoop(timeStamp) {
         player.x_v = -2.5;
     }
 
-    /*if (keys.up) {
-        player.y_v = -2.5;
-        player.climb = false;
-    }
-
-    if (keys.down) {
-        player.y_v = 2.5;
-        player.climb = false;
-    }*/
-
     if (keys.right) {
         player.x_v = 2.5;
     }
@@ -490,48 +488,32 @@ function gameLoop(timeStamp) {
     // update player's coordinates
     player.x += player.x_v;
     player.y += player.y_v;
-    //console.log(player.climb)
-
-    //player.climb = false;
 
     // check for collisions with platform
-    checkCollisions();
-    //checkLadderClimb();
-    //checkCoinCollisions();
-    checkKeyCollection();
-    playerAlive();
+    checkCollisions3();
+    checkKeyCollection3();
+    playerAlive3();
 
     // if win condition is met, end game
-    //isWin();
-    openDoor();
-    //console.log(currentSequence, victoryCondition);
-    /*if (victoryCondition) {
-        //renderCoins();
-        cancelAnimationFrame(gameLoop); 
-        // render some kind of win text
-        endScreen();
-        playAgainButton.style.visibility = "visible";
-    }
+    openDoor3();
 
-    else if (!isPlayerAlive || isOver) {
-        //renderCoins();
-        cancelAnimationFrame(gameLoop);
-        // render some kind of loss text + a try again thing
-        endScreen();
-        playAgainButton.style.visibility = "visible";
-        
-    }*/
+    if (victoryCondition || !isPlayerAlive || isOver) gameOver3();
 
-    if (victoryCondition || !isPlayerAlive || isOver) gameOver();
-
-    else window.requestAnimationFrame(gameLoop);
+    else window.requestAnimationFrame(gameLoop3);
 }
 
-function gameOver() {
-    cancelAnimationFrame(gameLoop);
-    endScreen();
-    init();
+function gameOver3() {
+    cancelAnimationFrame(gameLoop3);
+    endScreen3();
+    init3();
 }
 
 
+var reversedSemLevel = { // need start, render, gameloop?, end
+    type: jsPsychGame,
+    start: start3,
+    //loop: function(){},
+    gameWon: isGameWon,
+    verName: "reversedSem"
+}
 

@@ -3,7 +3,7 @@
     * make it work lol (v)
     * implement try again button (v)
     * collect and display data 
-    * make it work for all 10 versions
+    * make it work for all 10 versions --> next step
 
     * create second plugin that puts up the html plugin side by side
     * combine the two???? 
@@ -25,8 +25,12 @@ var jsPsychGame = (function (jspsych) {
                 default: null
             },
             gameWon: {
-                type: jspsych.ParameterType.BOOLEAN,
-                default: false
+                type: jspsych.ParameterType.FUNCTION,
+                default: null
+            },
+            verName: {
+                type: jspsych.ParameterType.STRING,
+                default: ""
             }
         },
     };
@@ -49,28 +53,34 @@ var jsPsychGame = (function (jspsych) {
             display_element.innerHTML = `
         <div id="game">
             <div id="intro">
-                <button type="button" id="startButton">START</button>
+                <!--<button type="button" id="startButton">START</button>-->
             </div>
             <div id="timer"> Timer: 0</div>
             <div id="end">
                 <button type="button" id="playAgain" hidden>TRY AGAIN</button>
+                <button type="button" id="successOne" hidden>CONTINUE</button>
             </div>
             <canvas id="canvas"></canvas>
         </div>
         `
+            trial.start();
 
-            display_element.querySelector("#startButton").addEventListener('click', trial.start);
             display_element.querySelector("#playAgain").addEventListener('click', trial.start);
+            display_element.querySelector("#successOne").addEventListener('click', (e) => {
+                e.preventDefault();
+                this.jsPsych.finishTrial();
+            });
 
             //stick this inside a requestAnimationFrame loop
-            window.requestAnimationFrame(this.checkDone);
+            /*window.requestAnimationFrame(() => {
+                this.checkDone(trial);
+            });*/
 
         }
 
-        checkDone() {
+        /*checkDone(trial) {
             //stick this inside a requestAnimationFrame loop
-            console.log(trial.gameWon);
-            if (trial.gameWon) {
+            if (trial.gameWon()) {
                 // data saving
                 var trial_data = {
                     //parameter_name: "parameter value",
@@ -85,10 +95,14 @@ var jsPsychGame = (function (jspsych) {
                 this.jsPsych.data.displayData();
                 console.log("hi");
             } else {
-                window.requestAnimationFrame(this.checkDone);
+                window.requestAnimationFrame(() => {
+                    this.checkDone(trial);
+                });
             }
             
-        }
+        }*/
+
+        
     }
     GamePlugin.info = info;
 

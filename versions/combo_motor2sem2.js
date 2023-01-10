@@ -1,6 +1,10 @@
-/* 
+/* NUMBER 7: COMBO of motor2+sem2 (letter controls and incorrect gravity)
     combination of letter control keys and incorrect gravity (motor2sem2)
-*/
+
+        TO DEBUG: 
+        * there might be something wrong w the up button?
+
+    */
 
 // variables
 var player;
@@ -21,14 +25,15 @@ var isPlayerAlive;
 var isOver;
 var victoryCondition;
 var playAgainButton;
+var successOneButton;
 var instructionsField;
 var timer;
 var timePassed = 0;
 
 
-window.addEventListener("load", init);
+window.addEventListener("load", init7);
 
-function init() {
+function init7() {
     startButton = document.getElementById("startButton");
     player = {
         x: 200,
@@ -91,29 +96,30 @@ function init() {
     victoryCondition = false;
     timer = document.getElementById("timer");
     playAgainButton = document.getElementById("playAgain");
+    successOneButton = document.getElementById("successOne");
 
 }
 
 // render canvas
-function renderCanvas() {
+function renderCanvas7() {
     ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, 550, 700);
+    ctx.fillRect(0, 0, 550, 450);
 }
 
 // render player
-function renderPlayer() {
+function renderPlayer7() {
     ctx.fillStyle = "#F08080";
     ctx.fillRect((player.x)-25, (player.y)-25, player.width, player.height);
 }
 
 // render ladder
-function renderLadder() {
+function renderLadder7() {
     ctx.fillStyle = "brown";
     ctx.fillRect(ladder.x, ladder.y, ladder.width, ladder.height);
 }
 
 // render starkey
-function renderStarKey() {
+function renderStarKey7() {
     if (!starkey.collected) {
         var rot = Math.PI / 2 * 3;
         var pointX = starkey.x;
@@ -146,13 +152,13 @@ function renderStarKey() {
 }
 
 // render door
-function renderDoor() {
+function renderDoor7() {
     ctx.fillStyle = "green";
     ctx.fillRect(door.x, door.y, door.width, door.height);
 }
 
 // create spikes
-function createSpikes() {
+function createSpikes7() {
     // spike on first platform
     spikes.push({x: 200, y: 230, width: 25, height: 20});
 
@@ -161,7 +167,7 @@ function createSpikes() {
 }
 
 // render spikes
-function renderSpikes() {
+function renderSpikes7() {
     for (ctr=0; ctr<spikes.length; ctr++) {
         ctx.strokeSyle = "#000";
         ctx.beginPath();
@@ -182,13 +188,13 @@ function renderSpikes() {
 
 
 // render ground
-function renderGround() {
+function renderGround7() {
     ctx.fillStyle = "black";
     ctx.fillRect(ground.x, ground.y, ground.width, ground.height);
 }
 
 // create platforms
-function createPlatforms() {
+function createPlatforms7() {
     // first platform
     platforms.push({x: 200, y: 200, width: 15, height: 110, color: "steelblue"});
 
@@ -203,7 +209,7 @@ function createPlatforms() {
 }
 
 // render platforms
-function renderPlatforms() {
+function renderPlatforms7() {
     //ctx.fillStyle = "#45597E";
     for (ctr=0; ctr<numPlatforms; ctr++) {
         ctx.fillStyle = platforms[ctr].color;
@@ -212,7 +218,7 @@ function renderPlatforms() {
 }
 
 // function for when a key is pressed
-function keyDown(e) {
+function keyDown7(e) {
     // left arrow key = 37
     // change to "l" key = 76
     if (e.keyCode == 76) {
@@ -247,7 +253,7 @@ function keyDown(e) {
 }
 
 // function for when a key is released
-function keyUp(e) {
+function keyUp7(e) {
     // left arrow key
     // change to l
     if (e.keyCode == 76) {
@@ -283,7 +289,7 @@ function keyUp(e) {
 }
 
 // function to check for collisions
-function checkCollisions() {
+function checkCollisions7() {
     ans = false;
     index = -1;
 
@@ -308,7 +314,7 @@ function checkCollisions() {
 }
 
 // function for climbing the ladder
-function checkLadderClimb() {
+function checkLadderClimb7() {
     if (ladder.x < player.x && player.x < ladder.x + ladder.width &&
         ladder.y < player.y && player.y < ladder.y + ladder.height) {
             player.climb = true;
@@ -321,7 +327,7 @@ function checkLadderClimb() {
 }
 
 // function for collecting the starkey
-function checkKeyCollection() {
+function checkKeyCollection7() {
     if (starkey.x < player.x && player.x < starkey.x+(starkey.outerRadius*2) &&
         starkey.y < player.y && player.y < starkey.y+(starkey.outerRadius*2)) {
             starkey.collected = true;
@@ -330,7 +336,7 @@ function checkKeyCollection() {
 }
 
 // function to check if door is reached
-function openDoor() {
+function openDoor7() {
     if (door.x < player.x && player.x < door.x + door.width &&
         door.y < player.y && player.y < door.y + door.height &&
         door.unlocked) {
@@ -339,7 +345,7 @@ function openDoor() {
 }
 
 // function to check if player died
-function playerAlive() {
+function playerAlive7() {
     hazardCollided = false;
     index = 0;
 
@@ -360,7 +366,7 @@ function playerAlive() {
 }
 
 // function to check win condition
-function isWin() {
+function isWin7() {
     ans = true;
     if (currentSequence.length == winSequence.length) {
         isOver = true;
@@ -376,8 +382,8 @@ function isWin() {
 }
 
 // function to display end screen
-function endScreen() {
-    renderCanvas();
+function endScreen7() {
+    renderCanvas7();
     //playAgainButton.style.visibility = "visible";
 
     ctx.fillStyle = "black";
@@ -385,55 +391,55 @@ function endScreen() {
     ctx.textBaseline = "middle";
     if (victoryCondition) {
         ctx.fillText("Success!", 50, 100);
+        successOneButton.hidden = false;
     }
 
     else if (!isPlayerAlive) {
         ctx.fillText("You have died.", 50, 100);
         ctx.fillText("Please try again.", 50, 150);
+        playAgainButton.hidden = false;
     }
 
     else ctx.fillText("Incorrect sequence. Please try again.", 50, 100);
-
-    playAgainButton.removeAttribute("hidden");
-    //playAgainButton.style.visibility = "visible";
 }
 
 
 
 // ok here we go with the actual game
-function start() {
-    startButton.style.display = "none";
-    //playAgainButton.style.visibility = "hidden";
+function start7() {
+    init7();
+    //startButton.style.display = "none";
+    playAgainButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
-    ctx.canvas.height = 550;
-    ctx.canvas.width = 1000;
-    createPlatforms();
-    createSpikes();
-    document.addEventListener("keydown",keyDown);
-    document.addEventListener("keyup",keyUp);
+    ctx.canvas.height = 450;
+    ctx.canvas.width = 550;
+    createPlatforms7();
+    createSpikes7();
+    document.addEventListener("keydown",keyDown7);
+    document.addEventListener("keyup",keyUp7);
     timePassed = 0;
 
-    window.requestAnimationFrame(gameLoop);
+    window.requestAnimationFrame(gameLoop7);
 }
 
 /*function startAgain() {
     playAgainButton.style.visibility = "hidden";
     renderCanvas();
-    //window.requestAnimationFrame(gameLoop);
+    //window.requestAnimationFrame(gameLoop7);
 }*/
 
-function gameLoop(timeStamp) {
+function gameLoop7(timeStamp) {
     // render everything
-    renderCanvas();
-    renderLadder();
-    renderPlayer();
-    renderStarKey();
-    renderDoor();
-    renderGround();
-    renderSpikes();
-    renderPlatforms();
-    checkLadderClimb();
+    renderCanvas7();
+    renderLadder7();
+    renderPlayer7();
+    renderStarKey7();
+    renderDoor7();
+    renderGround7();
+    renderSpikes7();
+    renderPlatforms7();
+    checkLadderClimb7();
     timePassed += Math.round(timeStamp / 1000);
     timer.innerHTML = "Timer: " + timePassed;
 
@@ -462,24 +468,34 @@ function gameLoop(timeStamp) {
     player.y += player.y_v;
 
     // check for collisions with platform
-    checkCollisions();
-    checkKeyCollection();
-    playerAlive();
+    checkCollisions7();
+    checkKeyCollection7();
+    playerAlive7();
 
     // if win condition is met, end game
     //isWin();
-    openDoor();
+    openDoor7();
 
-    if (victoryCondition || !isPlayerAlive || isOver) gameOver();
+    if (victoryCondition || !isPlayerAlive || isOver) gameOver7();
 
-    else window.requestAnimationFrame(gameLoop);
+    else window.requestAnimationFrame(gameLoop7);
 }
 
-function gameOver() {
-    cancelAnimationFrame(gameLoop);
-    endScreen();
-    init();
+function gameOver7() {
+    cancelAnimationFrame(gameLoop7);
+    endScreen7();
+    init7();
 }
 
 
-
+var comboMotor2Sem2 = { // need start, render, gameloop?, end
+    type: jsPsychGame,
+    start: start7,
+    //loop: function(){},
+    gameWon: isGameWon,
+    verName: "comboM2S2",
+    questions: [
+        {prompt:"Insert instructions here.", rows: 10},
+        {prompt:"I have completed the level at least once (type YES):"}
+    ]
+}

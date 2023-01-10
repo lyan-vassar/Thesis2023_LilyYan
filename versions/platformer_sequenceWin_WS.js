@@ -1,3 +1,19 @@
+/* NUMBER 5: PLATFORM SEQUENCE WIN
+
+    win by jumping on platforms
+
+    * so the win sequence works, but for some reason 
+        it takes so long for the doorunlocked thing to register. 
+        i didn't have this issue w the old howtounlock.js file before
+        so maybe i'm missing a code difference somewhere?
+
+    * would also like to figure out how to make the platforms
+        change color every time you jump on them, that'd be greattttt
+    * ^ changed this to having the platform turn green if correct
+        and red if not
+        * as long as there's SOME visual indication i think it's okay?
+*/
+
 // variables
 var player;
 var ground;
@@ -13,18 +29,21 @@ var friction;
 var gravity;
 var winSequence;
 var currentSequence;
+var groundCollided;
 var isPlayerAlive;
+var isOver;
 var victoryCondition;
 var playAgainButton;
+var successOneButton;
 var instructionsField;
 var timer;
 var timePassed = 0;
 
 
-window.addEventListener("load", init);
+window.addEventListener("load", init5);
 
-function init() {
-    startButton = document.getElementById("startButton");
+function init5() {
+    //startButton = document.getElementById("startButton");
     player = {
         x: 300,
         y: 200,
@@ -73,8 +92,9 @@ function init() {
         up: false
     };
 
-    winSequence = [2,1,0,3];
+    winSequence = [0,1,2,3];
     currentSequence = [];
+    groundCollided = false;
 
     spikes = [];
     numPlatforms = 4;
@@ -82,35 +102,35 @@ function init() {
     friction = 0.1;
     gravity = 0.6;
     isPlayerAlive = true;
+    isOver = false;
     victoryCondition = false;
     timer = document.getElementById("timer");
     playAgainButton = document.getElementById("playAgain");
+    successOneButton = document.getElementById("successOne");
 
 }
 
 // render canvas
-function renderCanvas() {
+function renderCanvas5() {
     ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, 1000, 550);
+    ctx.fillRect(0, 0, 550, 450);
 }
 
 // render player
-function renderPlayer() {
+function renderPlayer5() {
     ctx.fillStyle = "#F08080";
     ctx.fillRect((player.x)-25, (player.y)-25, player.width, player.height);
 }
 
 // render ladder
-function renderLadder() {
+function renderLadder5() {
     ctx.fillStyle = "brown";
     ctx.fillRect(ladder.x, ladder.y, ladder.width, ladder.height);
 }
 
 // render starkey
-function renderStarKey() {
-    if (!starkey.collected) { // only render if starkey wasn't collected yet
-        // this is a 5 point star-rendering function I found from online tutorials
-        // it's not perfect; i will try to figure out why
+function renderStarKey5() {
+    if (!starkey.collected) {
         var rot = Math.PI / 2 * 3;
         var pointX = starkey.x;
         var pointY = starkey.y;
@@ -142,13 +162,13 @@ function renderStarKey() {
 }
 
 // render door
-function renderDoor() {
+function renderDoor5() {
     ctx.fillStyle = "green";
     ctx.fillRect(door.x, door.y, door.width, door.height);
 }
 
 // create spikes
-function createSpikes() {
+function createSpikes5() {
     // spike on first platform
     spikes.push({x: 230, y: 200, width: 20, height: 25});
 
@@ -157,7 +177,7 @@ function createSpikes() {
 }
 
 // render spikes
-function renderSpikes() {
+function renderSpikes5() {
     for (ctr=0; ctr<spikes.length; ctr++) {
         ctx.strokeSyle = "#000";
         ctx.beginPath();
@@ -174,17 +194,17 @@ function renderSpikes() {
     }
 }
 
-// render enemy (maybe?)
+// render enemy
 
 
 // render ground
-function renderGround() {
+function renderGround5() {
     ctx.fillStyle = "black";
     ctx.fillRect(ground.x, ground.y, ground.width, ground.height);
 }
 
 // create platforms
-function createPlatforms() {
+function createPlatforms5() {
     // first platform
     platforms.push({x: 200, y: 200, width: 110, height: 15, color: "steelblue"});
 
@@ -199,7 +219,7 @@ function createPlatforms() {
 }
 
 // render platforms
-function renderPlatforms() {
+function renderPlatforms5() {
     for (ctr=0; ctr<numPlatforms; ctr++) {
         ctx.fillStyle = platforms[ctr].color;
         ctx.fillRect(platforms[ctr].x, platforms[ctr].y, platforms[ctr].width, platforms[ctr].height);
@@ -215,8 +235,8 @@ function keyDown(e) {
 
     // up arrow key = 38
     if (e.keyCode == 38) {
-        if (!player.jump) { // if player's not already in the air 
-            player.y_v = -10; // go up
+        if (!player.jump) {
+            player.y_v = -10; 
         }
 
         if (player.climb) {
@@ -269,8 +289,8 @@ function keyUp(e) {
     }
 }
 
-// function to check for platform collisions
-function checkCollisions() { 
+// function to check for collisions
+function checkCollisions5() {
     ans = false;
     index = -1;
 
@@ -279,24 +299,39 @@ function checkCollisions() {
             platforms[ctr].y < player.y && player.y < platforms[ctr].y + platforms[ctr].height){
                 ans = true;
                 index = ctr;
+                if (!currentSequence.includes(ctr)) currentSequence.push(ctr);
+
+                // for changing color of platforms; green = correct, red = incorrect
+                if (currentSequence.length <= winSequence.length && 
+                    currentSequence[ctr] == winSequence[ctr] && groundCollided) {
+                        platforms[ctr].color = "limegreen";
+                }
+                else if (currentSequence.length <= winSequence.length && 
+                    currentSequence[ctr] != winSequence[ctr] && groundCollided) {
+                        platforms[ctr].color = "red";
+                }
                 break;
         }
     }
 
-    if (ans) { // if player did hit a platform
-        player.jump = false; // player is no longer jumping
-        player.y = platforms[index].y; // keep player at same y level as platform
+    if (ans) {
+        player.jump = false;
+        player.y = platforms[index].y;
     }
 
-    else if (ground.y < player.y && player.y < ground.y+ground.height) { // if player's on the ground
+    else if (ground.y < player.y && player.y < ground.y+ground.height) {
         player.jump = false;
         player.y = ground.y;
+        groundCollided = true;
+        currentSequence = [];
+        for (ctr=0; ctr<numPlatforms; ctr++) {
+            platforms[ctr].color = "steelblue";
+        }
     }
 }
 
 // function for climbing the ladder
-// not flawless
-function checkLadderClimb() {
+function checkLadderClimb5() {
     if (ladder.x < player.x && player.x < ladder.x + ladder.width &&
         ladder.y < player.y && player.y < ladder.y + ladder.height) {
             player.climb = true;
@@ -309,25 +344,33 @@ function checkLadderClimb() {
 }
 
 // function for collecting the starkey
-function checkKeyCollection() {
+function checkKeyCollection5() {
     if (starkey.x < player.x && player.x < starkey.x+(starkey.outerRadius*2) &&
         starkey.y < player.y && player.y < starkey.y+(starkey.outerRadius*2)) {
             starkey.collected = true;
-            door.unlocked = true; // having the key means you can unlock the door
+            //door.unlocked = true;
         }
 }
 
+// 
+
 // function to check if door is reached
-function openDoor() {
-    if (door.x < player.x && player.x < door.x + door.width &&
+function openDoor5() {
+    /*if (door.x < player.x && player.x < door.x + door.width &&
         door.y < player.y && player.y < door.y + door.height &&
-        door.unlocked) { // if player reaches door AND door is unlocked
-            victoryCondition = true; // you win!
+        door.unlocked) {
+            victoryCondition = true;
+        }*/
+
+        if ((((door.x < player.x && player.x-player.width < door.x) ||
+        (door.x+door.width > player.x-player.width && player.x > door.x+door.width)) &&
+        door.y-door.height <= player.y && player.y <= door.y) && door.unlocked) {
+            victoryCondition = true;
         }
 }
 
 // function to check if player died
-function playerAlive() {
+function playerAlive5() {
     hazardCollided = false;
     index = 0;
 
@@ -335,7 +378,12 @@ function playerAlive() {
 
     // test for spike collision
     for (ctr=0; ctr<spikes.length; ctr++) {
-        // sorry this next line looks like a mess, it was the best way i could make it work
+        /*if (spikes[ctr].x < player.x && player.x < spikes[ctr].x+spikes[ctr].width &&
+            spikes[ctr].y < player.y && player.y < spikes[ctr].y-spikes[ctr].height) {
+                hazardCollided = true;
+                break;
+            }*/
+
         if (((spikes[ctr].x < player.x && player.x-player.width < spikes[ctr].x) || 
             (spikes[ctr].x+spikes[ctr].width > player.x-player.width && player.x > spikes[ctr].x+spikes[ctr].width)) &&
             spikes[ctr].y-spikes[ctr].height < player.y && player.y <= spikes[ctr].y) {
@@ -346,88 +394,84 @@ function playerAlive() {
     }
 
     isPlayerAlive = !hazardCollided;
-
 }
 
 // function to check win condition
-// this is really only relevant for the platform sequence level
-/*
-function isWin() {
+function isWin5() {
     ans = true;
-    if (currentSequence.length == winSequence.length) { 
+
+    if (currentSequence.length == winSequence.length) {
         for (ctr=0; ctr<currentSequence.length; ctr++) {
             if (currentSequence[ctr] != winSequence[ctr]) {
                 ans = false;
                 break;
             }
         }
-        victoryCondition = ans;
-    }
-}*/
 
-// function to display end screen
-function endScreen() {
-    renderCanvas();
-    //playAgainButton.style.visibility = "visible";
+        door.unlocked = ans && groundCollided;
+    }
+}
+
+
+// function to display end screen with play again fxn
+function endScreenSurvey5() {
+    renderCanvas0();
 
     ctx.fillStyle = "black";
     ctx.font = "48px arial";
     ctx.textBaseline = "middle";
     if (victoryCondition) {
         ctx.fillText("Success!", 50, 100);
+        playAgainButton.hidden = false;
     }
 
     else if (!isPlayerAlive) {
         ctx.fillText("You have died.", 50, 100);
         ctx.fillText("Please try again.", 50, 150);
+        playAgainButton.hidden = false;
     }
 
     else ctx.fillText("Incorrect sequence. Please try again.", 50, 100);
 
-    playAgainButton.removeAttribute("hidden");
+    //playAgainButton.hidden = false;
+    //playAgainButton.removeAttribute("hidden");
     //playAgainButton.style.visibility = "visible";
 }
 
 
-
 // ok here we go with the actual game
-function start() {
-    startButton.style.display = "none";
-    //playAgainButton.style.visibility = "hidden";
+function startSurvey5() {
+    init5();
+    //startButton.style.display = "none";
+    playAgainButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
-    ctx.canvas.height = 550;
-    ctx.canvas.width = 1000;
-    createPlatforms();
-    createSpikes();
+    ctx.canvas.height = 450;
+    ctx.canvas.width = 550;
+    createPlatforms5();
+    createSpikes5();
     document.addEventListener("keydown",keyDown);
     document.addEventListener("keyup",keyUp);
     timePassed = 0;
 
-    window.requestAnimationFrame(gameLoop);
+    window.requestAnimationFrame(gameLoopSurvey5);
 }
 
-/*function startAgain() {
-    playAgainButton.style.visibility = "hidden";
-    renderCanvas();
-    //window.requestAnimationFrame(gameLoop);
-}*/
-
-function gameLoop(timeStamp) {
+function gameLoopSurvey5(timeStamp) {
     // render everything
-    renderCanvas();
-    renderLadder();
-    renderPlayer();
-    renderStarKey();
-    renderDoor();
-    renderGround();
-    renderSpikes();
-    renderPlatforms();
-    checkLadderClimb();
+    renderCanvas5();
+    renderLadder5();
+    renderPlayer5();
+    renderStarKey5();
+    renderDoor5();
+    renderGround5();
+    renderSpikes5();
+    renderPlatforms5();
+    checkLadderClimb5();
     timePassed += Math.round(timeStamp / 1000);
     timer.innerHTML = "Timer: " + timePassed;
 
-    // if player is not jumping, apply friction; otherwise apply gravity
+    // if player is not jumping, apply friction. otherwise apply gravity
     if (player.jump == false) {
         player.x_v *= friction;
     }
@@ -451,25 +495,39 @@ function gameLoop(timeStamp) {
     player.x += player.x_v;
     player.y += player.y_v;
 
-    //player.climb = false;
-
     // check for collisions with platform
-    checkCollisions();
-    checkKeyCollection();
-    playerAlive();
+    checkCollisions5();
+    checkKeyCollection5();
+    playerAlive5();
 
     // if win condition is met, end game
-    //isWin();
-    openDoor();
+    isWin5();
+    openDoor5();
 
-    // game ends if you win, or if you die
-    if (victoryCondition || !isPlayerAlive) gameOver();
+    if (victoryCondition || !isPlayerAlive || isOver) gameOverSurvey5();
 
-    else window.requestAnimationFrame(gameLoop);
+    else window.requestAnimationFrame(gameLoopSurvey5);
 }
 
-function gameOver() { // if game is over
-    cancelAnimationFrame(gameLoop);
-    endScreen();
-    init();
+function gameOverSurvey5() {
+    cancelAnimationFrame(gameLoopSurvey5);
+    endScreenSurvey5(); 
+    init5();
 }
+
+function isGameWon(){
+    //return (victoryCondition || !isPlayerAlive);
+    return victoryCondition;
+}
+
+var sequenceWinLevelSurvey = { // need start, render, gameloop?, end
+    type: jsPsychGameSurvey,
+    start: startSurvey5,
+    //loop: function(){},
+    gameWon: isGameWon,
+    verName: "sequenceWin",
+    questions: [
+        {prompt:"Insert instructions here.", rows: 10}
+    ]
+}
+

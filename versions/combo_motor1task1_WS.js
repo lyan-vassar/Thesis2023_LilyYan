@@ -1,17 +1,5 @@
-/* NUMBER 5: PLATFORM SEQUENCE WIN
-
-    win by jumping on platforms
-
-    * so the win sequence works, but for some reason 
-        it takes so long for the doorunlocked thing to register. 
-        i didn't have this issue w the old howtounlock.js file before
-        so maybe i'm missing a code difference somewhere?
-
-    * would also like to figure out how to make the platforms
-        change color every time you jump on them, that'd be greattttt
-    * ^ changed this to having the platform turn green if correct
-        and red if not
-        * as long as there's SOME visual indication i think it's okay?
+/* NUMBER 9: COMBO of motor1+task1 (inverted controls + sequence win)
+    * combination of inverted controls and platform sequence win condition
 */
 
 // variables
@@ -40,9 +28,9 @@ var timer;
 var timePassed = 0;
 
 
-window.addEventListener("load", init5);
+window.addEventListener("load", init9);
 
-function init5() {
+function init9() {
     //startButton = document.getElementById("startButton");
     player = {
         x: 300,
@@ -111,25 +99,26 @@ function init5() {
 }
 
 // render canvas
-function renderCanvas5() {
+function renderCanvas9() {
+    //ctx.fillStyle = "#F0F8FF";
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, 550, 450);
 }
 
 // render player
-function renderPlayer5() {
+function renderPlayer9() {
     ctx.fillStyle = "#F08080";
     ctx.fillRect((player.x)-25, (player.y)-25, player.width, player.height);
 }
 
 // render ladder
-function renderLadder5() {
+function renderLadder9() {
     ctx.fillStyle = "brown";
     ctx.fillRect(ladder.x, ladder.y, ladder.width, ladder.height);
 }
 
 // render starkey
-function renderStarKey5() {
+function renderStarKey9() {
     if (!starkey.collected) {
         var rot = Math.PI / 2 * 3;
         var pointX = starkey.x;
@@ -162,13 +151,14 @@ function renderStarKey5() {
 }
 
 // render door
-function renderDoor5() {
+function renderDoor9() {
     ctx.fillStyle = "green";
     ctx.fillRect(door.x, door.y, door.width, door.height);
+    //console.log(door.unlocked);
 }
 
 // create spikes
-function createSpikes5() {
+function createSpikes9() {
     // spike on first platform
     spikes.push({x: 230, y: 200, width: 20, height: 25});
 
@@ -177,7 +167,7 @@ function createSpikes5() {
 }
 
 // render spikes
-function renderSpikes5() {
+function renderSpikes9() {
     for (ctr=0; ctr<spikes.length; ctr++) {
         ctx.strokeSyle = "#000";
         ctx.beginPath();
@@ -198,13 +188,13 @@ function renderSpikes5() {
 
 
 // render ground
-function renderGround5() {
+function renderGround9() {
     ctx.fillStyle = "black";
     ctx.fillRect(ground.x, ground.y, ground.width, ground.height);
 }
 
 // create platforms
-function createPlatforms5() {
+function createPlatforms9() {
     // first platform
     platforms.push({x: 200, y: 200, width: 110, height: 15, color: "steelblue"});
 
@@ -219,24 +209,25 @@ function createPlatforms5() {
 }
 
 // render platforms
-function renderPlatforms5() {
+function renderPlatforms9() {
     for (ctr=0; ctr<numPlatforms; ctr++) {
         ctx.fillStyle = platforms[ctr].color;
         ctx.fillRect(platforms[ctr].x, platforms[ctr].y, platforms[ctr].width, platforms[ctr].height);
     }
+
 }
 
 // function for when a key is pressed
-function keyDown(e) {
+function keyDown9(e) {
     // left arrow key = 37
-    if (e.keyCode == 37) {
+    if (e.keyCode == 39) {
         keys.left = true;
     }
 
     // up arrow key = 38
-    if (e.keyCode == 38) {
+    if (e.keyCode == 40) {
         if (!player.jump) {
-            player.y_v = -10; 
+            player.y_v = -10;
         }
 
         if (player.climb) {
@@ -245,27 +236,27 @@ function keyDown(e) {
     }
 
     // down arrow key
-    if (e.keyCode == 40) {
+    if (e.keyCode == 38) {
         if (player.climb) {
             keys.down = true;
         }
     }
 
     // right arrow key = 39
-    if (e.keyCode == 39) {
+    if (e.keyCode == 37) {
         keys.right = true;
     }
 }
 
 // function for when a key is released
-function keyUp(e) {
+function keyUp9(e) {
     // left arrow key
-    if (e.keyCode == 37) {
+    if (e.keyCode == 39) {
         keys.left = false;
     }
 
     // up arrow key
-    if (e.keyCode == 38) {
+    if (e.keyCode == 40) {
         if (player.y_v < -2 && !player.climb) {
             player.y_v = -3; 
         }
@@ -276,7 +267,7 @@ function keyUp(e) {
     }
 
     // down arrow key
-    if (e.keyCode == 40) {
+    if (e.keyCode == 38) {
         if (player.climb) {
             player.y_v = 0;
             keys.down = false;
@@ -284,13 +275,13 @@ function keyUp(e) {
     }
 
     // right arrow key
-    if (e.keyCode == 39) {
+    if (e.keyCode == 37) {
         keys.right = false;
     }
 }
 
 // function to check for collisions
-function checkCollisions5() {
+function checkCollisions9() {
     ans = false;
     index = -1;
 
@@ -331,7 +322,7 @@ function checkCollisions5() {
 }
 
 // function for climbing the ladder
-function checkLadderClimb5() {
+function checkLadderClimb9() {
     if (ladder.x < player.x && player.x < ladder.x + ladder.width &&
         ladder.y < player.y && player.y < ladder.y + ladder.height) {
             player.climb = true;
@@ -344,7 +335,7 @@ function checkLadderClimb5() {
 }
 
 // function for collecting the starkey
-function checkKeyCollection5() {
+function checkKeyCollection9() {
     if (starkey.x < player.x && player.x < starkey.x+(starkey.outerRadius*2) &&
         starkey.y < player.y && player.y < starkey.y+(starkey.outerRadius*2)) {
             starkey.collected = true;
@@ -355,22 +346,22 @@ function checkKeyCollection5() {
 // 
 
 // function to check if door is reached
-function openDoor5() {
+function openDoor9() {
     /*if (door.x < player.x && player.x < door.x + door.width &&
         door.y < player.y && player.y < door.y + door.height &&
         door.unlocked) {
             victoryCondition = true;
         }*/
 
-        if ((((door.x < player.x && player.x-player.width < door.x) ||
+    if (((door.x < player.x && player.x-player.width < door.x) ||
         (door.x+door.width > player.x-player.width && player.x > door.x+door.width)) &&
-        door.y-door.height <= player.y && player.y <= door.y) && door.unlocked) {
+        door.y-door.height <= player.y && player.y <= door.y) {
             victoryCondition = true;
         }
 }
 
 // function to check if player died
-function playerAlive5() {
+function playerAlive9() {
     hazardCollided = false;
     index = 0;
 
@@ -378,12 +369,6 @@ function playerAlive5() {
 
     // test for spike collision
     for (ctr=0; ctr<spikes.length; ctr++) {
-        /*if (spikes[ctr].x < player.x && player.x < spikes[ctr].x+spikes[ctr].width &&
-            spikes[ctr].y < player.y && player.y < spikes[ctr].y-spikes[ctr].height) {
-                hazardCollided = true;
-                break;
-            }*/
-
         if (((spikes[ctr].x < player.x && player.x-player.width < spikes[ctr].x) || 
             (spikes[ctr].x+spikes[ctr].width > player.x-player.width && player.x > spikes[ctr].x+spikes[ctr].width)) &&
             spikes[ctr].y-spikes[ctr].height < player.y && player.y <= spikes[ctr].y) {
@@ -394,10 +379,11 @@ function playerAlive5() {
     }
 
     isPlayerAlive = !hazardCollided;
+
 }
 
 // function to check win condition
-function isWin5() {
+function isWin9() {
     ans = true;
 
     if (currentSequence.length == winSequence.length) {
@@ -413,15 +399,16 @@ function isWin5() {
 }
 
 // function to display end screen
-function endScreen5() {
-    renderCanvas5();
+function endScreenSurvey9() {
+    renderCanvas9();
+    //playAgainButton.style.visibility = "visible";
 
     ctx.fillStyle = "black";
     ctx.font = "48px arial";
     ctx.textBaseline = "middle";
     if (victoryCondition) {
         ctx.fillText("Success!", 50, 100);
-        successOneButton.hidden = false;
+        playAgainButton.hidden = false;
     }
 
     else if (!isPlayerAlive) {
@@ -431,47 +418,46 @@ function endScreen5() {
     }
 
     else ctx.fillText("Incorrect sequence. Please try again.", 50, 100);
-
-    //playAgainButton.removeAttribute("hidden");
-    //playAgainButton.style.visibility = "visible";
 }
 
 
+
 // ok here we go with the actual game
-function start5() {
-    init5();
+function startSurvey9() {
+    init9();
     //startButton.style.display = "none";
     playAgainButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
     ctx.canvas.height = 450;
     ctx.canvas.width = 550;
-    createPlatforms5();
-    createSpikes5();
-    document.addEventListener("keydown",keyDown);
-    document.addEventListener("keyup",keyUp);
+    createPlatforms9();
+    createSpikes9();
+    document.addEventListener("keydown",keyDown9);
+    document.addEventListener("keyup",keyUp9);
     timePassed = 0;
 
-    window.requestAnimationFrame(gameLoop5);
+    window.requestAnimationFrame(gameLoopSurvey9);
 }
 
-function startAgain5() {
-    playAgainButton.hidden = true;
-    renderCanvas5();
+/*
+function startAgain9() {
+    playAgainButton.style.visibility = "hidden";
+    renderCanvas9();
     //window.requestAnimationFrame(gameLoop);
-}
+}*/
 
-function gameLoop5(timeStamp) {
+function gameLoopSurvey9(timeStamp) {
     // render everything
-    renderCanvas5();
-    renderLadder5();
-    renderPlayer5();
-    renderStarKey5();
-    renderDoor5();
-    renderGround5();
-    renderSpikes5();
-    renderPlatforms5();
-    checkLadderClimb5();
+    renderCanvas9();
+    renderLadder9();
+    renderPlayer9();
+    renderStarKey9();
+    renderDoor9();
+    renderGround9();
+    renderSpikes9();
+    renderPlatforms9();
+    checkLadderClimb9();
     timePassed += Math.round(timeStamp / 1000);
     timer.innerHTML = "Timer: " + timePassed;
 
@@ -500,35 +486,32 @@ function gameLoop5(timeStamp) {
     player.y += player.y_v;
 
     // check for collisions with platform
-    checkCollisions5();
-    checkKeyCollection5();
-    playerAlive5();
+    checkCollisions9();
+    checkKeyCollection9();
+    playerAlive9();
 
     // if win condition is met, end game
-    isWin5();
-    openDoor5();
+    isWin9();
+    openDoor9();
 
-    if (victoryCondition || !isPlayerAlive || isOver) gameOver5();
+    if (victoryCondition || !isPlayerAlive || isOver) gameOverSurvey9();
 
-    else window.requestAnimationFrame(gameLoop5);
+    else window.requestAnimationFrame(gameLoopSurvey9);
 }
 
-function gameOver5() {
-    cancelAnimationFrame(gameLoop5);
-    endScreen5();
-    init5();
+function gameOverSurvey9() {
+    cancelAnimationFrame(gameLoopSurvey9);
+    endScreenSurvey9();
+    init9();
 }
 
-function isGameWon(){
-    //return (victoryCondition || !isPlayerAlive);
-    return victoryCondition;
-}
-
-var sequenceWinLevel = { // need start, render, gameloop?, end
-    type: jsPsychGame,
-    start: start5,
+var comboMotor1Task1Survey = { // need start, render, gameloop?, end
+    type: jsPsychGameSurvey,
+    start: startSurvey9,
     //loop: function(){},
     gameWon: isGameWon,
-    verName: "sequenceWin"
+    verName: "comboM1T1",
+    questions: [
+        {prompt:"Insert instructions here.", rows: 10}
+    ]
 }
-
