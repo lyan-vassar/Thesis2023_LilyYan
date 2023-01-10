@@ -26,12 +26,12 @@ jsPsych.data.addProperties({
     session_id: session_id
 });
 
-var levels = [sequenceWinLevel, sequenceWinLevel];
-var levelSurveys = [sequenceWinLevelSurvey, sequenceWinLevelSurvey];
+var levels = [basicLevel, invertedControlsLevel, letterControlsLevel, reversedSemLevel, gravityLevel, sequenceWinLevel, difKeyLevel, comboMotor2Sem2, comboSem1Task2, comboMotor1Task1];
+var levelSurveys = [basicLevelSurvey, invertedControlsLevelSurvey, letterControlsLevelSurvey, reversedSemLevelSurvey, gravityLevelSurvey, sequenceWinLevelSurvey, difKeyLevelSurvey, comboMotor2Sem2Survey, comboSem1Task2Survey, comboMotor1Task1Survey];
 
 // Randomly chooses version the subject gets
-//var versionNum = jsPsych.randomization.sampleWithoutReplacement([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 1)[0];
-var versionNum = jsPsych.randomization.sampleWithoutReplacement([0, 1], 1)[0];
+var versionNum = jsPsych.randomization.sampleWithoutReplacement([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 1)[0];
+//var versionNum = jsPsych.randomization.sampleWithoutReplacement([0, 1], 1)[0];
 
 var currLevel = levels[versionNum];
 var levelPrompt = levelSurveys[versionNum];
