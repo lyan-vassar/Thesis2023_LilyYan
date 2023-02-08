@@ -111,7 +111,7 @@ const save_data = {
   data_string: ()=>jsPsych.data.get().csv()
 };
 
-timeline.push(save_server_data);
+timeline.push(save_data);
 
 var debrief_block = {
     type: jsPsychHtmlKeyboardResponse,
