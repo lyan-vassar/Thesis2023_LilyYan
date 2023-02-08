@@ -88,7 +88,7 @@ timeline.push(currLevel);
 timeline.push(levelPrompt);
 
 // Saves data
-var save_server_data = {
+/* var save_server_data = {
     type: jsPsychCallFunction,
     func: function () {
       var data = jsPsych.data.get().json();
@@ -100,6 +100,16 @@ var save_server_data = {
     },
     post_trial_gap: 1000
   }
+
+timeline.push(save_server_data); */
+
+const save_data = {
+  type: jsPsychPipe,
+  action: "save",
+  experiment_id: "CS7DzI5aepgd",
+  filename: `${jsPsych.randomization.randomID(10)}.csv`,
+  data_string: ()=>jsPsych.data.get().csv()
+};
 
 timeline.push(save_server_data);
 
