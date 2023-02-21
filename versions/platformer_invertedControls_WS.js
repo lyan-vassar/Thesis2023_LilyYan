@@ -24,8 +24,8 @@ var victoryCondition;
 var playAgainButton;
 var successOneButton;
 var instructionsField;
-var timer;
-var timePassed = 0;
+// var timer;
+// var timePassed = 0;
 
 
 window.addEventListener("load", init1);
@@ -91,7 +91,7 @@ function init1() {
     isPlayerAlive = true;
     isOver = false;
     victoryCondition = false;
-    timer = document.getElementById("timer");
+    // timer = document.getElementById("timer");
     playAgainButton = document.getElementById("playAgain");
     successOneButton = document.getElementById("successOne");
 
@@ -152,25 +152,36 @@ function renderStarKey1() {
 function renderDoor1() {
     ctx.fillStyle = "green";
     ctx.fillRect(door.x, door.y, door.width, door.height);
+
+    // for doorknob:
+    ctx.fillStyle = "yellow";
+    ctx.strokeStyle = "yellow";
+    ctx.lineWidth = 1;
+    var radius = 2;
+
+    ctx.beginPath();
+    ctx.arc(door.x+5, door.y+20, 3, 0, 2 * Math.PI);
+    ctx.fill();
 }
 
 // create spikes
 function createSpikes1() {
     // spike on first platform
-    spikes.push({x: 230, y: 200, width: 20, height: 25});
+    spikes.push({x: 230, y: 200, width: 20, height: 10});
 
     // spike on starkey platform
-    spikes.push({x: 215, y: 50, width: 20, height: 25});
+    spikes.push({x: 215, y: 50, width: 20, height: 10});
 }
 
 // render spikes
 function renderSpikes1() {
     for (ctr=0; ctr<spikes.length; ctr++) {
-        ctx.strokeSyle = "#000";
-        ctx.beginPath();
-        ctx.moveTo(spikes[ctr].x, spikes[ctr].y);
-        ctx.lineTo(spikes[ctr].x+(spikes[ctr].width/2), spikes[ctr].y-spikes[ctr].height);
-        ctx.lineTo(spikes[ctr].x+spikes[ctr].width, spikes[ctr].y);
+        // attempting to render it a little differently; three small spikes, not one big one
+        //ctx.strokeSyle = "#000";
+        ctx.beginPath(); // first spike
+        ctx.moveTo(spikes[ctr].x, spikes[ctr].y); //starting point
+        ctx.lineTo(spikes[ctr].x+(spikes[ctr].width/6), spikes[ctr].y-spikes[ctr].height);
+        ctx.lineTo(spikes[ctr].x+(spikes[ctr].width/3), spikes[ctr].y); 
         ctx.lineTo(spikes[ctr].x, spikes[ctr].y);
         ctx.closePath();
         ctx.lineWidth=5;
@@ -178,6 +189,25 @@ function renderSpikes1() {
         ctx.stroke();
         ctx.fillStyle = "silver";
         ctx.fill();
+
+        ctx.beginPath(); // second spike
+        ctx.moveTo(spikes[ctr].x+(spikes[ctr].width/3), spikes[ctr].y); //starting point
+        ctx.lineTo(spikes[ctr].x+(spikes[ctr].width/2), spikes[ctr].y-spikes[ctr].height);
+        ctx.lineTo(spikes[ctr].x+(2*spikes[ctr].width/3), spikes[ctr].y); 
+        ctx.lineTo(spikes[ctr].x+(spikes[ctr].width/3), spikes[ctr].y);
+        ctx.closePath();;
+        ctx.stroke();
+        ctx.fill();
+
+        ctx.beginPath(); // third spike
+        ctx.moveTo(spikes[ctr].x+(2*spikes[ctr].width/3), spikes[ctr].y); //starting point
+        ctx.lineTo(spikes[ctr].x+(5*spikes[ctr].width/6), spikes[ctr].y-spikes[ctr].height);
+        ctx.lineTo(spikes[ctr].x+(spikes[ctr].width), spikes[ctr].y); 
+        ctx.lineTo(spikes[ctr].x+(2*spikes[ctr].width/3), spikes[ctr].y);
+        ctx.closePath();;
+        ctx.stroke();
+        ctx.fill();
+
     }
 }
 
@@ -290,7 +320,7 @@ function checkCollisions1() {
     index = -1;
 
     for (ctr=0; ctr<numPlatforms; ctr++) {
-        if (platforms[ctr].x < player.x && player.x <= platforms[ctr].x + platforms[ctr].width &&
+        if (platforms[ctr].x < player.x && player.x-player.width <= platforms[ctr].x + platforms[ctr].width &&
             platforms[ctr].y < player.y && player.y < platforms[ctr].y + platforms[ctr].height){
                 ans = true;
                 index = ctr;
@@ -307,6 +337,9 @@ function checkCollisions1() {
         player.jump = false;
         player.y = ground.y;
     }
+
+    if (player.x-player.width <= 0) player.x = player.width;
+    if (player.x >= ground.width) player.x = ground.width;
 }
 
 // function for climbing the ladder
@@ -333,10 +366,10 @@ function checkKeyCollection1() {
 
 // function to check if door is reached
 function openDoor1() {
-    if (door.x < player.x && player.x < door.x + door.width &&
-        door.y < player.y && player.y < door.y + door.height &&
-        door.unlocked) {
-            victoryCondition = true;
+    if (door.unlocked && ((door.y < player.y && player.y-player.height < door.y) ||
+        (door.y+door.height > player.y-player.height && player.y > door.y+door.height)) &&
+        door.x <= player.x && player.x <= door.x+door.width) { // if player reaches door AND door is unlocked
+            victoryCondition = true; // you win!
         }
 }
 
@@ -378,6 +411,9 @@ function endScreenSurvey1() {
     if (victoryCondition) {
         ctx.fillText("Success!", 50, 100);
         playAgainButton.hidden = false;
+
+        document.removeEventListener("keydown",keyDown);
+        document.removeEventListener("keyup",keyUp);
     }
 
     else if (!isPlayerAlive) {
@@ -404,7 +440,7 @@ function startSurvey1() {
     createSpikes1();
     document.addEventListener("keydown",keyDown1);
     document.addEventListener("keyup",keyUp1);
-    timePassed = 0;
+    // timePassed = 0;
 
     window.requestAnimationFrame(gameLoopSurvey1);
 }
@@ -412,16 +448,16 @@ function startSurvey1() {
 function gameLoopSurvey1(timeStamp) {
     // render everything
     renderCanvas1();
-    renderLadder1();
+    //renderLadder1();
     renderPlayer1();
     renderStarKey1();
     renderDoor1();
     renderGround1();
     renderSpikes1();
     renderPlatforms1();
-    checkLadderClimb1();
-    timePassed += Math.round(timeStamp / 1000);
-    timer.innerHTML = "Timer: " + timePassed;
+    //checkLadderClimb1();
+    // timePassed += Math.round(timeStamp / 1000);
+    // timer.innerHTML = "Timer: " + timePassed;
 
     // if player is not jumping, apply friction. otherwise apply gravity
     if (player.jump == false) {
@@ -445,6 +481,7 @@ function gameLoopSurvey1(timeStamp) {
 
     // update player's coordinates
     player.x += player.x_v;
+    if (player.y_v >= 10) player.y_v = 10;
     player.y += player.y_v;
 
     // check for collisions with platform

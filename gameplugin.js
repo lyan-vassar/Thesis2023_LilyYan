@@ -55,7 +55,7 @@ var jsPsychGame = (function (jspsych) {
             <div id="intro">
                 <!--<button type="button" id="startButton">START</button>-->
             </div>
-            <div id="timer"> Timer: 0</div>
+            <!--<div id="timer"> Timer: 0</div>-->
             <div id="end">
                 <button type="button" id="playAgain" hidden>TRY AGAIN</button>
                 <button type="button" id="successOne" hidden>CONTINUE</button>

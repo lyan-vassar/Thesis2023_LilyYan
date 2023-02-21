@@ -33,8 +33,17 @@ var levelSurveys = [basicLevelSurvey, invertedControlsLevelSurvey, letterControl
 var versionNum = jsPsych.randomization.sampleWithoutReplacement([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 1)[0];
 //var versionNum = jsPsych.randomization.sampleWithoutReplacement([0, 1], 1)[0];
 
+// for debug purposes, comment out when done 
+
+//var currLevel = comboMotor1Task1;
+//var levelPrompt = comboMotor1Task1Survey;
+
+// comment back in for final version
+
+
 var currLevel = levels[versionNum];
 var levelPrompt = levelSurveys[versionNum];
+
 
 // will add version number to data frame
 jsPsych.data.addProperties({
@@ -78,13 +87,22 @@ var trialPt2 = {
 var trial = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: function() {
-        var stim = "<div id='game'><script type='text/javascript' src='platformer_basic.js'></script><div id='intro'><button type='button' id='startButton' onclick='start()'>START</button></div><div id='timer'> Timer: 0</div><div id='end'><button type='button' id='playAgain' onclick='start()' hidden>TRY AGAIN</button></div><canvas id='canvas'></canvas></div>";
+        var stim = "<div id='game'><script type='text/javascript' src='platformer_basic.js'></script><div id='intro'><button type='button' id='startButton' onclick='start()'>START</button></div><div id='end'><button type='button' id='playAgain' onclick='start()' hidden>TRY AGAIN</button></div><canvas id='canvas'></canvas></div>";
         return stim;
     }
 }*/
 
 console.log(currLevel);
 timeline.push(currLevel);
+
+// instructions for second part
+var instructionsPt2 = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: "<p>Congratulations! You have successfully completed the level.</p><p>You will now be asked to write instructions for the level you have just played. As a reminder, imagine you are trying to explain how to play and win the level to someone who has never seen or played the level before. You will be allowed to replay the level as much as you’d like until you submit your instructions.</p><p>Press any key to continue.</p>",
+  choice: [" "],
+};
+
+timeline.push(instructionsPt2);
 timeline.push(levelPrompt);
 
 // Saves data
@@ -113,10 +131,10 @@ const save_data = {
 
 timeline.push(save_data);
 
-var debrief_block = {
+var debrief = {
     type: jsPsychHtmlKeyboardResponse,
-    stimulus: `<p>You have completed the experiment. Thank you!</p>`,
-    choices: [" "]//,
+    stimulus: "Thank you for participating in the experiment!\n If you'd like to learn more about the purpose of this experiment and what we're measuring, press 'y'.<p>Otherwise, <a href='https://app.prolific.co/submissions/complete?cc=COZ068ZS'>click here to return to Prolific and complete the study</a>.</p>"
+    //choices: [" "]//,
     /*on_finish: function () {
       document.querySelector("html").classList.remove("hide-cursor");
     },*/
@@ -129,8 +147,35 @@ var debrief_block = {
         //.localSave("json", `subject-${subject_id}-behavioral.json`);
     },*/
   };
-  
-  timeline.push(debrief_block);
+
+  var full_debrief = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: "The main question of this study is whether or not intuition in platformer games can be quantified and/or measured. Each participant is given a random platformer level that has been made unintuitive in some manner. The instructions written by participants will be analyzed to measure understanding and proficiency, to see the extent of which factors affect one’s ability to understand the level. <p><a href='https://app.prolific.co/submissions/complete?cc=COZ068ZS'>Click here to return to Prolific and complete the study</a>.</p>",
+    choices: "NO_KEYS",
+}
+
+// Gives participant option of getting full debrief
+var if_full_debrief = {
+  timeline: [full_debrief],
+  conditional_function: function () {
+      // Checks which key was pressed
+      var key = jsPsych.data.get().last(1).values()[0];
+      if (jsPsych.pluginAPI.compareKeys(key.response, 'y')) {
+          return true;
+      }
+      else {
+          return false;
+      }
+  }
+}
+
+var goodbye = {
+  type: jsPsychHtmlKeyboardResponse,
+  stimulus: "Thanks for participating! <a href='https://app.prolific.co/submissions/complete?cc=COZ068ZS'>Click here to return to Prolific and complete the study</a>."
+}
+
+
+timeline.push(debrief, if_full_debrief, goodbye);
   
 
 // run the timeline

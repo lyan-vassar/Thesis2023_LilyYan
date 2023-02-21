@@ -101,7 +101,7 @@ var jsPsychGameSurvey = (function (jspsych) {
             <div id="intro">
                 <!--<button type="button" id="startButton">START</button>-->
             </div>
-            <div id="timer"> Timer: 0</div>
+            <!--<div id="timer"> Timer: 0</div>-->
             <div id="end">
                 <button type="button" id="playAgain" hidden>TRY AGAIN</button>
             </div>
@@ -306,7 +306,7 @@ var jsPsychGameSurvey = (function (jspsych) {
                 var trial_data = {
                     //parameter_name: "parameter value",
                     success: trial.victoryCondition,
-                    timePassed: trial.timePassed
+                    //timePassed: trial.timePassed
                 };
                 // end trial
                 this.jsPsych.finishTrial(trial_data);

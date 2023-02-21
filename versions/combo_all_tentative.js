@@ -26,8 +26,8 @@ var isOver;
 var victoryCondition;
 var playAgainButton;
 var instructionsField;
-var timer;
-var timePassed = 0;
+//var timer;
+//var timePassed = 0;
 
 
 window.addEventListener("load", init);
@@ -95,7 +95,7 @@ function init() {
     isPlayerAlive = true;
     isOver = false;
     victoryCondition = false;
-    timer = document.getElementById("timer");
+    //timer = document.getElementById("timer");
     playAgainButton = document.getElementById("playAgain");
 
 }
@@ -438,7 +438,7 @@ function start() {
     createSpikes();
     document.addEventListener("keydown",keyDown);
     document.addEventListener("keyup",keyUp);
-    timePassed = 0;
+    //timePassed = 0;
 
     window.requestAnimationFrame(gameLoop);
 }
@@ -461,8 +461,8 @@ function gameLoop(timeStamp) {
     renderPlatforms();
     if (!starkey.collected) renderStarKey();
     checkLadderClimb();
-    timePassed += Math.round(timeStamp / 1000);
-    timer.innerHTML = "Timer: " + timePassed;
+    //timePassed += Math.round(timeStamp / 1000);
+    //timer.innerHTML = "Timer: " + timePassed;
 
     // if player is not jumping, apply friction. otherwise apply gravity
     if (player.jump == false) {

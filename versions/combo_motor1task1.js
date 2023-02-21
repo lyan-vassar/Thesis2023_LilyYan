@@ -24,8 +24,8 @@ var victoryCondition;
 var playAgainButton;
 var successOneButton;
 var instructionsField;
-var timer;
-var timePassed = 0;
+//var timer;
+//var timePassed = 0;
 
 
 window.addEventListener("load", init9);
@@ -92,7 +92,7 @@ function init9() {
     isPlayerAlive = true;
     isOver = false;
     victoryCondition = false;
-    timer = document.getElementById("timer");
+    // timer = document.getElementById("timer");
     playAgainButton = document.getElementById("playAgain");
     successOneButton = document.getElementById("successOne");
     console.log("hi");
@@ -155,26 +155,36 @@ function renderStarKey9() {
 function renderDoor9() {
     ctx.fillStyle = "green";
     ctx.fillRect(door.x, door.y, door.width, door.height);
-    console.log(door.unlocked);
+    
+    // for doorknob:
+    ctx.fillStyle = "yellow";
+    ctx.strokeStyle = "yellow";
+    ctx.lineWidth = 1;
+    var radius = 2;
+
+    ctx.beginPath();
+    ctx.arc(door.x+5, door.y+20, 3, 0, 2 * Math.PI);
+    ctx.fill();
 }
 
 // create spikes
 function createSpikes9() {
     // spike on first platform
-    spikes.push({x: 230, y: 200, width: 20, height: 25});
+    spikes.push({x: 230, y: 200, width: 20, height: 10});
 
     // spike on starkey platform
-    spikes.push({x: 215, y: 50, width: 20, height: 25});
+    spikes.push({x: 215, y: 50, width: 20, height: 10});
 }
 
 // render spikes
 function renderSpikes9() {
     for (ctr=0; ctr<spikes.length; ctr++) {
-        ctx.strokeSyle = "#000";
-        ctx.beginPath();
-        ctx.moveTo(spikes[ctr].x, spikes[ctr].y);
-        ctx.lineTo(spikes[ctr].x+(spikes[ctr].width/2), spikes[ctr].y-spikes[ctr].height);
-        ctx.lineTo(spikes[ctr].x+spikes[ctr].width, spikes[ctr].y);
+        // attempting to render it a little differently; three small spikes, not one big one
+        //ctx.strokeSyle = "#000";
+        ctx.beginPath(); // first spike
+        ctx.moveTo(spikes[ctr].x, spikes[ctr].y); //starting point
+        ctx.lineTo(spikes[ctr].x+(spikes[ctr].width/6), spikes[ctr].y-spikes[ctr].height);
+        ctx.lineTo(spikes[ctr].x+(spikes[ctr].width/3), spikes[ctr].y); 
         ctx.lineTo(spikes[ctr].x, spikes[ctr].y);
         ctx.closePath();
         ctx.lineWidth=5;
@@ -182,6 +192,25 @@ function renderSpikes9() {
         ctx.stroke();
         ctx.fillStyle = "silver";
         ctx.fill();
+
+        ctx.beginPath(); // second spike
+        ctx.moveTo(spikes[ctr].x+(spikes[ctr].width/3), spikes[ctr].y); //starting point
+        ctx.lineTo(spikes[ctr].x+(spikes[ctr].width/2), spikes[ctr].y-spikes[ctr].height);
+        ctx.lineTo(spikes[ctr].x+(2*spikes[ctr].width/3), spikes[ctr].y); 
+        ctx.lineTo(spikes[ctr].x+(spikes[ctr].width/3), spikes[ctr].y);
+        ctx.closePath();;
+        ctx.stroke();
+        ctx.fill();
+
+        ctx.beginPath(); // third spike
+        ctx.moveTo(spikes[ctr].x+(2*spikes[ctr].width/3), spikes[ctr].y); //starting point
+        ctx.lineTo(spikes[ctr].x+(5*spikes[ctr].width/6), spikes[ctr].y-spikes[ctr].height);
+        ctx.lineTo(spikes[ctr].x+(spikes[ctr].width), spikes[ctr].y); 
+        ctx.lineTo(spikes[ctr].x+(2*spikes[ctr].width/3), spikes[ctr].y);
+        ctx.closePath();;
+        ctx.stroke();
+        ctx.fill();
+
     }
 }
 
@@ -287,21 +316,32 @@ function checkCollisions9() {
     index = -1;
 
     for (ctr=0; ctr<numPlatforms; ctr++) {
-        if (platforms[ctr].x < player.x && player.x <= platforms[ctr].x + platforms[ctr].width &&
+        if (platforms[ctr].x < player.x && player.x-player.width <= platforms[ctr].x + platforms[ctr].width &&
             platforms[ctr].y < player.y && player.y < platforms[ctr].y + platforms[ctr].height){
                 ans = true;
                 index = ctr;
-                if (!currentSequence.includes(ctr)) currentSequence.push(ctr);
+                //if (!currentSequence.includes(ctr)) currentSequence.push(ctr);
+                if (currentSequence.length == 0) currentSequence.push(index);
+                else if (currentSequence.length > 0 && currentSequence[currentSequence.length-1] != index) 
+                    currentSequence.push(index);
 
+                    //console.log(noDuplicates(currentSequence), ctr, currentSequence);
+
+                //console.log(currentSequence);
                 // for changing color of platforms; green = correct, red = incorrect
-                if (currentSequence.length <= winSequence.length && 
-                    currentSequence[ctr] == winSequence[ctr] && groundCollided) {
-                        platforms[ctr].color = "limegreen";
+                if (currentSequence.length <= winSequence.length && currentSequence[index] == winSequence[index] 
+                    && groundCollided && noDuplicates(currentSequence)) {
+                        //console.log(noDuplicates(currentSequence), ctr);
+                        platforms[index].color = "limegreen";
                 }
                 else if (currentSequence.length <= winSequence.length && 
-                    currentSequence[ctr] != winSequence[ctr] && groundCollided) {
-                        platforms[ctr].color = "red";
+                    currentSequence[index] != winSequence[index] && groundCollided) {
+                        platforms[index].color = "red";
                 }
+                else if ((!noDuplicates(currentSequence)) && groundCollided) 
+                    platforms[index].color = "red";
+
+                else if (currentSequence.length > winSequence.length && groundCollided) platforms[index].color = "red";
                 break;
         }
     }
@@ -311,7 +351,7 @@ function checkCollisions9() {
         player.y = platforms[index].y;
     }
 
-    else if (ground.y < player.y && player.y < ground.y+ground.height) {
+    else if (ground.y < player.y && player.y < ground.y+ground.height) { // collide with ground
         player.jump = false;
         player.y = ground.y;
         groundCollided = true;
@@ -320,6 +360,9 @@ function checkCollisions9() {
             platforms[ctr].color = "steelblue";
         }
     }
+    
+    if (player.x-player.width <= 0) player.x = player.width;
+    if (player.x >= ground.width) player.x = ground.width;
 }
 
 // function for climbing the ladder
@@ -354,10 +397,10 @@ function openDoor9() {
             victoryCondition = true;
         }*/
 
-    if (((door.x < player.x && player.x-player.width < door.x) ||
-        (door.x+door.width > player.x-player.width && player.x > door.x+door.width)) &&
-        door.y-door.height <= player.y && player.y <= door.y) {
-            victoryCondition = true;
+        if (door.unlocked && ((door.y < player.y && player.y-player.height < door.y) ||
+        (door.y+door.height > player.y-player.height && player.y > door.y+door.height)) &&
+        door.x <= player.x && player.x <= door.x+door.width) { // if player reaches door AND door is unlocked
+            victoryCondition = true; // you win!
         }
 }
 
@@ -385,18 +428,7 @@ function playerAlive9() {
 
 // function to check win condition
 function isWin9() {
-    ans = true;
-
-    if (currentSequence.length == winSequence.length) {
-        for (ctr=0; ctr<currentSequence.length; ctr++) {
-            if (currentSequence[ctr] != winSequence[ctr]) {
-                ans = false;
-                break;
-            }
-        }
-
-        door.unlocked = ans && groundCollided;
-    }
+    door.unlocked = arrEqual(currentSequence, winSequence) && groundCollided;
 }
 
 // function to display end screen
@@ -409,6 +441,9 @@ function endScreen9() {
     if (victoryCondition) {
         ctx.fillText("Success!", 50, 100);
         successOneButton.hidden = false;
+
+        document.removeEventListener("keydown",keyDown);
+        document.removeEventListener("keyup",keyUp);
     }
 
     else if (!isPlayerAlive) {
@@ -435,7 +470,7 @@ function start9() {
     createSpikes9();
     document.addEventListener("keydown",keyDown9);
     document.addEventListener("keyup",keyUp9);
-    timePassed = 0;
+    // timePassed = 0;
 
     window.requestAnimationFrame(gameLoop9);
 }
@@ -450,16 +485,16 @@ function startAgain9() {
 function gameLoop9(timeStamp) {
     // render everything
     renderCanvas9();
-    renderLadder9();
+    //renderLadder9();
     renderPlayer9();
     renderStarKey9();
     renderDoor9();
     renderGround9();
     renderSpikes9();
     renderPlatforms9();
-    checkLadderClimb9();
-    timePassed += Math.round(timeStamp / 1000);
-    timer.innerHTML = "Timer: " + timePassed;
+    //checkLadderClimb9();
+    // timePassed += Math.round(timeStamp / 1000);
+    // timer.innerHTML = "Timer: " + timePassed;
 
     // if player is not jumping, apply friction. otherwise apply gravity
     if (player.jump == false) {
@@ -483,6 +518,7 @@ function gameLoop9(timeStamp) {
 
     // update player's coordinates
     player.x += player.x_v;
+    if (player.y_v >= 10) player.y_v = 10;
     player.y += player.y_v;
 
     // check for collisions with platform

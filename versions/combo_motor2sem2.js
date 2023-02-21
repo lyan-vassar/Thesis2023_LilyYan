@@ -27,8 +27,8 @@ var victoryCondition;
 var playAgainButton;
 var successOneButton;
 var instructionsField;
-var timer;
-var timePassed = 0;
+// var timer;
+// var timePassed = 0;
 
 
 window.addEventListener("load", init7);
@@ -94,7 +94,7 @@ function init7() {
     isPlayerAlive = true;
     isOver = false;
     victoryCondition = false;
-    timer = document.getElementById("timer");
+    // timer = document.getElementById("timer");
     playAgainButton = document.getElementById("playAgain");
     successOneButton = document.getElementById("successOne");
 
@@ -155,25 +155,37 @@ function renderStarKey7() {
 function renderDoor7() {
     ctx.fillStyle = "green";
     ctx.fillRect(door.x, door.y, door.width, door.height);
+
+    // for doorknob:
+    ctx.fillStyle = "yellow";
+    ctx.strokeStyle = "yellow";
+    ctx.lineWidth = 1;
+    var radius = 2;
+
+    ctx.beginPath();
+    ctx.arc(door.x+20, door.y+5, 3, 0, 2 * Math.PI);
+    ctx.fill();
 }
 
 // create spikes
 function createSpikes7() {
     // spike on first platform
-    spikes.push({x: 200, y: 230, width: 25, height: 20});
+    spikes.push({x: 200, y: 230, width: 20, height: 10});
 
     // spike on starkey platform
-    spikes.push({x: 50, y: 215, width: 25, height: 20});
+    spikes.push({x: 50, y: 210, width: 20, height: 10});
 }
 
 // render spikes
 function renderSpikes7() {
+    // render spikes
     for (ctr=0; ctr<spikes.length; ctr++) {
-        ctx.strokeSyle = "#000";
-        ctx.beginPath();
-        ctx.moveTo(spikes[ctr].x, spikes[ctr].y);
-        ctx.lineTo(spikes[ctr].x-spikes[ctr].width, spikes[ctr].y+(spikes[ctr].width/2));
-        ctx.lineTo(spikes[ctr].x, spikes[ctr].y+spikes[ctr].width);
+        // attempting to render it a little differently; three small spikes, not one big one
+        //ctx.strokeSyle = "#000";
+        ctx.beginPath(); // first spike
+        ctx.moveTo(spikes[ctr].x, spikes[ctr].y); //starting point
+        ctx.lineTo(spikes[ctr].x-(spikes[ctr].height), spikes[ctr].y+spikes[ctr].width/6);
+        ctx.lineTo(spikes[ctr].x, spikes[ctr].y+(spikes[ctr].width/3)); 
         ctx.lineTo(spikes[ctr].x, spikes[ctr].y);
         ctx.closePath();
         ctx.lineWidth=5;
@@ -181,6 +193,25 @@ function renderSpikes7() {
         ctx.stroke();
         ctx.fillStyle = "silver";
         ctx.fill();
+
+        ctx.beginPath(); // second spike
+        ctx.moveTo(spikes[ctr].x, spikes[ctr].y+(spikes[ctr].width/3)); //starting point
+        ctx.lineTo(spikes[ctr].x-spikes[ctr].height, spikes[ctr].y+(spikes[ctr].width/2));
+        ctx.lineTo(spikes[ctr].x, spikes[ctr].y+(2*spikes[ctr].width/3)); 
+        ctx.lineTo(spikes[ctr].x, spikes[ctr].y+(spikes[ctr].width/3));
+        ctx.closePath();;
+        ctx.stroke();
+        ctx.fill();
+
+        ctx.beginPath(); // third spike
+        ctx.moveTo(spikes[ctr].x, spikes[ctr].y+(2*spikes[ctr].width/3)); //starting point
+        ctx.lineTo(spikes[ctr].x-spikes[ctr].height, spikes[ctr].y+(5*spikes[ctr].width/6));
+        ctx.lineTo(spikes[ctr].x, spikes[ctr].y+(spikes[ctr].width)); 
+        ctx.lineTo(spikes[ctr].x, spikes[ctr].y+(2*spikes[ctr].width/3));
+        ctx.closePath();;
+        ctx.stroke();
+        ctx.fill();
+
     }
 }
 
@@ -294,8 +325,8 @@ function checkCollisions7() {
     index = -1;
 
     for (ctr=0; ctr<numPlatforms; ctr++) {
-        if (platforms[ctr].x < player.x && player.x <= platforms[ctr].x + platforms[ctr].width &&
-            platforms[ctr].y < player.y && player.y < platforms[ctr].y + platforms[ctr].height){
+        if (platforms[ctr].x < player.x && player.x < platforms[ctr].x + platforms[ctr].width &&
+            platforms[ctr].y < player.y && player.y-player.height <= platforms[ctr].y + platforms[ctr].height){
                 ans = true;
                 index = ctr;
                 break;
@@ -311,6 +342,8 @@ function checkCollisions7() {
         player.jump = false;
         player.x = ground.x;
     }
+    if (player.y-player.height <= 0) player.y = player.height;
+    if (player.y >= ground.height) player.y = ground.height;
 }
 
 // function for climbing the ladder
@@ -337,10 +370,10 @@ function checkKeyCollection7() {
 
 // function to check if door is reached
 function openDoor7() {
-    if (door.x < player.x && player.x < door.x + door.width &&
-        door.y < player.y && player.y < door.y + door.height &&
-        door.unlocked) {
-            victoryCondition = true;
+    if (door.unlocked && ((door.y < player.y && player.y-player.height < door.y) ||
+        (door.y+door.height > player.y-player.height && player.y > door.y+door.height)) &&
+        door.x <= player.x && player.x <= door.x+door.width) { // if player reaches door AND door is unlocked
+            victoryCondition = true; // you win!
         }
 }
 
@@ -392,6 +425,9 @@ function endScreen7() {
     if (victoryCondition) {
         ctx.fillText("Success!", 50, 100);
         successOneButton.hidden = false;
+
+        document.removeEventListener("keydown",keyDown);
+        document.removeEventListener("keyup",keyUp);
     }
 
     else if (!isPlayerAlive) {
@@ -418,7 +454,7 @@ function start7() {
     createSpikes7();
     document.addEventListener("keydown",keyDown7);
     document.addEventListener("keyup",keyUp7);
-    timePassed = 0;
+    // timePassed = 0;
 
     window.requestAnimationFrame(gameLoop7);
 }
@@ -432,16 +468,16 @@ function start7() {
 function gameLoop7(timeStamp) {
     // render everything
     renderCanvas7();
-    renderLadder7();
+    //renderLadder7();
     renderPlayer7();
     renderStarKey7();
     renderDoor7();
     renderGround7();
     renderSpikes7();
     renderPlatforms7();
-    checkLadderClimb7();
-    timePassed += Math.round(timeStamp / 1000);
-    timer.innerHTML = "Timer: " + timePassed;
+    //checkLadderClimb7();
+    // timePassed += Math.round(timeStamp / 1000);
+    // timer.innerHTML = "Timer: " + timePassed;
 
     // if player is not jumping, apply friction. otherwise apply gravity
     if (player.jump == false) {
@@ -465,6 +501,7 @@ function gameLoop7(timeStamp) {
 
     // update player's coordinates
     player.x += player.x_v;
+    if (player.y_v >= 10) player.y_v = 10;
     player.y += player.y_v;
 
     // check for collisions with platform
