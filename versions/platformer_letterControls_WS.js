@@ -366,9 +366,9 @@ function checkKeyCollection2() {
 
 // function to check if door is reached
 function openDoor2() {
-    if (door.unlocked && ((door.y < player.y && player.y-player.height < door.y) ||
-        (door.y+door.height > player.y-player.height && player.y > door.y+door.height)) &&
-        door.x <= player.x && player.x <= door.x+door.width) { // if player reaches door AND door is unlocked
+    if (door.unlocked && ((door.x < player.x && player.x-player.width < door.x) ||
+        (door.x+door.width > player.x-player.width && player.x > door.x+door.width)) &&
+        door.y <= player.y && player.y <= door.y+door.height) { // if player reaches door AND door is unlocked
             victoryCondition = true; // you win!
         }
 }
