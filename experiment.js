@@ -35,12 +35,12 @@ var versionNum = jsPsych.randomization.sampleWithoutReplacement([0, 1, 2, 3, 4, 
 
 // for debug purposes, comment out when done 
 
-var currLevel = gravityLevel;
-var levelPrompt = gravityLevelSurvey;
+//var currLevel = gravityLevel;
+//var levelPrompt = gravityLevelSurvey;
 
 // comment back in for final version
-//var currLevel = levels[versionNum];
-//var levelPrompt = levelSurveys[versionNum];
+var currLevel = levels[versionNum];
+var levelPrompt = levelSurveys[versionNum];
 
 
 // will add version number to data frame
