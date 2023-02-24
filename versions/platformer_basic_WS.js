@@ -34,6 +34,7 @@ var victoryCondition;
 var playAgainButton;
 var successOneButton;
 var instructionsField;
+var numberOfDeaths = 0;
 // var timer;
 // var timePassed = 0;
 
@@ -109,7 +110,7 @@ function init0() {
 // render canvas
 function renderCanvas0() {
     ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, 550, 450);
+    ctx.fillRect(0, 0, 550, 300);
 }
 
 // render player
@@ -439,6 +440,7 @@ function endScreenLoop0() {
         ctx.fillText("You have died.", 50, 100);
         ctx.fillText("Please try again.", 50, 150);
         playAgainButton.hidden = false;
+        numberOfDeaths += 1;
     }
 
     else ctx.fillText("Incorrect sequence. Please try again.", 50, 100);
@@ -457,7 +459,6 @@ function endScreenLoop0() {
     ctx.textBaseline = "middle";
     if (victoryCondition) {
         ctx.fillText("Success!", 50, 100);
-        //console.log("hi");
         playAgainButton.hidden = false;
     }
 
@@ -484,7 +485,7 @@ function startSurvey0() {
     playAgainButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
-    ctx.canvas.height = 450;
+    ctx.canvas.height = 300;
     ctx.canvas.width = 550;
     createPlatforms0();
     createSpikes0();
@@ -502,7 +503,7 @@ function startSurvey0() {
 }*/
 
 function gameLoopSurvey0(timeStamp) {
-    console.log(victoryCondition);
+    //console.log(victoryCondition);
     // render everything
     renderCanvas0();
     //renderLadder0();
@@ -590,10 +591,9 @@ function isGameWon(){
 var basicLevelSurvey = { // need start, render, gameloop?, end
     type: jsPsychGameSurvey,
     start: startSurvey0,
-    //loop: function(){},
     gameWon: isGameWon,
     verName: "basic",
     questions: [
-        {prompt:"Insert instructions here.", rows: 10}
+        {prompt:"Describe how to win the level in the box below.", rows: 10}
     ]
 }

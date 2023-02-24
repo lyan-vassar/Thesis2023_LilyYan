@@ -30,6 +30,7 @@ var victoryCondition;
 var playAgainButton;
 var successOneButton;
 var instructionsField;
+var numberOfDeaths = 0;
 // var timer;
 // var timePassed = 0;
 
@@ -126,7 +127,7 @@ function init3() {
 // render canvas
 function renderCanvas3() {
     ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, 550, 450);
+    ctx.fillRect(0, 0, 550, 300);
 }
 
 // render player
@@ -441,6 +442,7 @@ function endScreenSurvey3() {
         ctx.fillText("You have died.", 50, 100);
         ctx.fillText("Please try again.", 50, 150);
         playAgainButton.hidden = false;
+        numberOfDeaths += 1;
     }
 
     else ctx.fillText("Incorrect sequence. Please try again.", 50, 100);
@@ -455,7 +457,7 @@ function startSurvey3() {
     playAgainButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
-    ctx.canvas.height = 450;
+    ctx.canvas.height = 300;
     ctx.canvas.width = 550;
     createPlatforms3();
     createSpikes3();
@@ -539,7 +541,7 @@ var reversedSemLevelSurvey = { // need start, render, gameloop?, end
     gameWon: isGameWon,
     verName: "reversedSem",
     questions: [
-        {prompt:"Insert instructions here.", rows: 10}
+        {prompt:"Describe how to win the level in the box below.", rows: 10}
     ]
 }
 

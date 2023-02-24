@@ -36,6 +36,7 @@ var victoryCondition;
 var playAgainButton;
 var successOneButton;
 var instructionsField;
+var numberOfDeaths = 0;
 // var timer;
 // var timePassed = 0;
 
@@ -133,7 +134,7 @@ function arrEqual(arr1, arr2) {
 // render canvas
 function renderCanvas5() {
     ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, 550, 450);
+    ctx.fillRect(0, 0, 550, 300);
 }
 
 // render player
@@ -485,6 +486,7 @@ function endScreenSurvey5() {
         ctx.fillText("You have died.", 50, 100);
         ctx.fillText("Please try again.", 50, 150);
         playAgainButton.hidden = false;
+        numberOfDeaths += 1;
     }
 
     else ctx.fillText("Incorrect sequence. Please try again.", 50, 100);
@@ -502,7 +504,7 @@ function startSurvey5() {
     playAgainButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
-    ctx.canvas.height = 450;
+    ctx.canvas.height = 300;
     ctx.canvas.width = 550;
     createPlatforms5();
     createSpikes5();
@@ -584,7 +586,7 @@ var sequenceWinLevelSurvey = { // need start, render, gameloop?, end
     gameWon: isGameWon,
     verName: "sequenceWin",
     questions: [
-        {prompt:"Insert instructions here.", rows: 10}
+        {prompt:"Describe how to win the level in the box below.", rows: 10}
     ]
 }
 

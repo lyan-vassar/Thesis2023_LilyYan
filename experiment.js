@@ -35,17 +35,18 @@ var versionNum = jsPsych.randomization.sampleWithoutReplacement([0, 1, 2, 3, 4, 
 
 // for debug purposes, comment out when done 
 
-//var currLevel = gravityLevel;
-//var levelPrompt = gravityLevelSurvey;
+var currLevel = basicLevel;
+var levelPrompt = basicLevelSurvey;
 
 // comment back in for final version
-var currLevel = levels[versionNum];
-var levelPrompt = levelSurveys[versionNum];
+//var currLevel = levels[versionNum];
+//var levelPrompt = levelSurveys[versionNum];
 
 
 // will add version number to data frame
 jsPsych.data.addProperties({
     version: versionNum
+    //deaths: numberOfDeaths
 });
 
 var welcome = {
@@ -60,7 +61,7 @@ timeline.push(welcome);
 // Instructions
 var instructions = {
     type: jsPsychHtmlKeyboardResponse,
-    stimulus: "<p>In this experiment, you will be presented with a basic platformer level. Your goal is to win the level as quickly as possible.</p><p>Once you have completed the level one time, you will be prompted to produce instructions on how to win the level. Imagine you are trying to explain how to play and win the level to someone who has never seen or played the level before. You will be allowed to replay the level as much as you’d like until you submit your instructions.</p><p>To begin the experiment, hit the space bar.</p>",
+    stimulus: "<p>In this experiment, you will be presented with a basic platformer level, which is a two-dimensional game consisting of an avatar you can control and platforms you can jump between. Your goal is to figure out how to win the level, and complete it as quickly as possible.</p><p>Once you have completed the level once, you will be prompted to produce instructions on how to win the level. Imagine you are trying to explain how to play and win it to someone who has never seen or played it before. You will be allowed to replay the level as much as you’d like until you submit your instructions.</p><p>To begin the experiment, hit the space bar.</p>",
     choice: [" "],
 };
 
@@ -90,13 +91,13 @@ var trial = {
     }
 }*/
 
-console.log(currLevel);
+//console.log(currLevel);
 timeline.push(currLevel);
 
 // instructions for second part
 var instructionsPt2 = {
   type: jsPsychHtmlKeyboardResponse,
-  stimulus: "<p>Congratulations! You have successfully completed the level.</p><p>You will now be asked to write instructions for the level you have just played. As a reminder, imagine you are trying to explain how to play and win the level to someone who has never seen or played the level before. You will be allowed to replay the level as much as you’d like until you submit your instructions.</p><p>Press any key to continue.</p>",
+  stimulus: "<p>Congratulations! You have successfully completed the level.</p><p>You will now be asked to write instructions on how to complete the level. As a reminder, imagine you are trying to explain how to play and win the level to someone who has never seen or played the level before. You will be allowed to replay the level as much as you’d like until you submit your instructions.</p><p>Press any key to continue.</p>",
   choice: [" "],
 };
 
@@ -118,6 +119,15 @@ timeline.push(levelPrompt);
   }
 
 timeline.push(save_server_data); */
+
+var quickQuestion = {
+  type: jsPsychSurveyText,
+  questions: [
+    {prompt: "One last question before you go: How familiar are you with platformer games? Do you play them often? Have you played one before?"}
+  ]
+}
+
+timeline.push(quickQuestion);
 
 const save_data = {
   type: jsPsychPipe,

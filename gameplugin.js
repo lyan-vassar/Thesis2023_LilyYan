@@ -69,6 +69,7 @@ var jsPsychGame = (function (jspsych) {
             display_element.querySelector("#successOne").addEventListener('click', (e) => {
                 e.preventDefault();
                 this.jsPsych.finishTrial();
+                //this.jsPsych.data.get().addToAll({deaths: trial.deaths});
             });
 
             //stick this inside a requestAnimationFrame loop

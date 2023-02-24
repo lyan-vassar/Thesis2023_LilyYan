@@ -25,6 +25,7 @@ var victoryCondition;
 var playAgainButton;
 var successOneButton;
 var instructionsField;
+var numberOfDeaths = 0;
 // var timer;
 // var timePassed = 0;
 
@@ -101,7 +102,7 @@ function init4() {
 // render canvas
 function renderCanvas4() {
     ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, 550, 700);
+    ctx.fillRect(0, 0, 550, 300);
 }
 
 // render player
@@ -412,6 +413,7 @@ function endScreenSurvey4() {
         ctx.fillText("You have died.", 50, 100);
         ctx.fillText("Please try again.", 50, 150);
         playAgainButton.hidden = false;
+        numberOfDeaths += 1;
     }
 
     else ctx.fillText("Incorrect sequence. Please try again.", 50, 100);
@@ -426,8 +428,8 @@ function startSurvey4() {
     playAgainButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
-    ctx.canvas.height = 550;
-    ctx.canvas.width = 1000;
+    ctx.canvas.height = 300;
+    ctx.canvas.width = 550;
     createPlatforms4();
     createSpikes4();
     document.addEventListener("keydown",keyDown4);
@@ -506,7 +508,7 @@ var gravityLevelSurvey = { // need start, render, gameloop?, end
     gameWon: isGameWon,
     verName: "gravity",
     questions: [
-        {prompt:"Insert instructions here.", rows: 10}
+        {prompt:"Describe how to win the level in the box below.", rows: 10}
     ]
 }
 

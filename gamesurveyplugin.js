@@ -314,7 +314,7 @@ var jsPsychGameSurvey = (function (jspsych) {
                 //FOR DEVELOPMENT TESTING PURPOSES ONLY
                 //this.jsPsych.data.get().localSave('csv','mydata.csv');
                 this.jsPsych.data.displayData();
-                console.log("hi");
+                //console.log("hi");
             } else {
                 window.requestAnimationFrame(() => {
                     this.checkDone(trial);

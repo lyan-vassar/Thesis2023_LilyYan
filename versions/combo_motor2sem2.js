@@ -27,6 +27,7 @@ var victoryCondition;
 var playAgainButton;
 var successOneButton;
 var instructionsField;
+var numberOfDeaths = 0;
 // var timer;
 // var timePassed = 0;
 
@@ -103,7 +104,7 @@ function init7() {
 // render canvas
 function renderCanvas7() {
     ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, 550, 450);
+    ctx.fillRect(0, 0, 550, 300);
 }
 
 // render player
@@ -370,9 +371,9 @@ function checkKeyCollection7() {
 
 // function to check if door is reached
 function openDoor7() {
-    if (door.unlocked && ((door.x < player.x && player.x-player.width < door.x) ||
-        (door.x+door.width > player.x-player.width && player.x > door.x+door.width)) &&
-        door.y <= player.y && player.y <= door.y+door.height) { // if player reaches door AND door is unlocked
+    if (door.unlocked && ((door.y < player.y && player.y-player.height < door.y) ||
+        (door.y+door.height > player.y-player.height && player.y > door.y+door.height)) &&
+        door.x <= player.x && player.x <= door.x+door.width) { // if player reaches door AND door is unlocked
             victoryCondition = true; // you win!
         }
 }
@@ -434,6 +435,7 @@ function endScreen7() {
         ctx.fillText("You have died.", 50, 100);
         ctx.fillText("Please try again.", 50, 150);
         playAgainButton.hidden = false;
+        numberOfDeaths += 1;
     }
 
     else ctx.fillText("Incorrect sequence. Please try again.", 50, 100);
@@ -448,7 +450,7 @@ function start7() {
     playAgainButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
-    ctx.canvas.height = 450;
+    ctx.canvas.height = 300;
     ctx.canvas.width = 550;
     createPlatforms7();
     createSpikes7();

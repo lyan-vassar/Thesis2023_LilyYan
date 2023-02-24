@@ -35,6 +35,7 @@ var victoryCondition;
 var playAgainButton;
 var successOneButton;
 var instructionsField;
+var numberOfDeaths = 0;
 // var timer;
 // var timePassed = 0;
 
@@ -439,12 +440,15 @@ function endScreen0() {
 
         document.removeEventListener("keydown",keyDown);
         document.removeEventListener("keyup",keyUp);
+
+        jsPsych.data.get().addToAll({deaths: numberOfDeaths});
     }
 
     else if (!isPlayerAlive) {
         ctx.fillText("You have died.", 50, 100);
         ctx.fillText("Please try again.", 50, 150);
         playAgainButton.hidden = false;
+        numberOfDeaths += 1;
     }
 
     //else ctx.fillText("Incorrect sequence. Please try again.", 50, 100);
@@ -484,7 +488,7 @@ function start0() {
     playAgainButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
-    ctx.canvas.height = 450;
+    ctx.canvas.height = 300;
     ctx.canvas.width = 550;
     createPlatforms0();
     createSpikes0();
@@ -581,7 +585,7 @@ function isGameWon(){
 var basicLevel = { // need start, render, gameloop?, end
     type: jsPsychGame,
     start: start0,
-    //loop: function(){},
     gameWon: isGameWon,
-    verName: "basic"
+    verName: "basic",
+    deaths: numberOfDeaths
 }
