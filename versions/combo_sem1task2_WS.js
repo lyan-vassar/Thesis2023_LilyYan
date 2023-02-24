@@ -29,9 +29,9 @@ var numberOfDeaths = 0;
 // var timePassed = 0;
 
 
-window.addEventListener("load", init8);
+window.addEventListener("load", initSurvey8);
 
-function init8() {
+function initSurvey8() {
     //startButton = document.getElementById("startButton");
     player = {
         x: 300,
@@ -96,6 +96,7 @@ function init8() {
     // timer = document.getElementById("timer");
     playAgainButton = document.getElementById("playAgain");
     successOneButton = document.getElementById("successOne");
+    hintButton = document.getElementById("hint");
 
 }
 
@@ -460,7 +461,7 @@ function endScreenSurvey8() {
 
 // ok here we go with the actual game
 function startSurvey8() {
-    init8();
+    initSurvey8();
     //startButton.style.display = "none";
     playAgainButton.hidden = true;
     canvas=document.getElementById("canvas");
@@ -538,7 +539,7 @@ function gameLoopSurvey8(timeStamp) {
 function gameOverSurvey8() {
     cancelAnimationFrame(gameLoopSurvey8);
     endScreenSurvey8();
-    init8();
+    initSurvey8();
 }
 
 

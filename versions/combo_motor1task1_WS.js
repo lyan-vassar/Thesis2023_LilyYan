@@ -27,11 +27,13 @@ var instructionsField;
 var numberOfDeaths = 0;
 //var timer;
 //var timePassed = 0;
+var initialTimeCollected = false;
+var startTime = 0;
 
 
-window.addEventListener("load", init9);
+window.addEventListener("load", initSurvey9);
 
-function init9() {
+function initSurvey9() {
     //startButton = document.getElementById("startButton");
     player = {
         x: 300,
@@ -96,6 +98,7 @@ function init9() {
     //timer = document.getElementById("timer");
     playAgainButton = document.getElementById("playAgain");
     successOneButton = document.getElementById("successOne");
+    hintButton = document.getElementById("hint");
 
 }
 
@@ -461,7 +464,7 @@ function endScreenSurvey9() {
 
 // ok here we go with the actual game
 function startSurvey9() {
-    init9();
+    initSurvey9();
     //startButton.style.display = "none";
     playAgainButton.hidden = true;
     canvas=document.getElementById("canvas");
@@ -540,7 +543,7 @@ function gameLoopSurvey9(timeStamp) {
 function gameOverSurvey9() {
     cancelAnimationFrame(gameLoopSurvey9);
     endScreenSurvey9();
-    init9();
+    initSurvey9();
 }
 
 var comboMotor1Task1Survey = { // need start, render, gameloop?, end

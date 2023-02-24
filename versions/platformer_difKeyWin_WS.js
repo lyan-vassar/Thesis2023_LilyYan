@@ -32,9 +32,9 @@ var numberOfDeaths = 0;
 // var timePassed = 0;
 
 
-window.addEventListener("load", init6);
+window.addEventListener("load", initSurvey6);
 
-function init6() {
+function initSurvey6() {
     //startButton = document.getElementById("startButton");
     player = {
         x: 300,
@@ -98,6 +98,7 @@ function init6() {
     // timer = document.getElementById("timer");
     playAgainButton = document.getElementById("playAgain");
     successOneButton = document.getElementById("successOne");
+    hintButton = document.getElementById("hint");
 
 }
 
@@ -433,7 +434,7 @@ function endScreenSurvey6() {
 
 // ok here we go with the actual game
 function startSurvey6() {
-    init6();
+    initSurvey6();
     //startButton.style.display = "none";
     playAgainButton.hidden = true;
     canvas=document.getElementById("canvas");
@@ -504,7 +505,7 @@ function gameLoopSurvey6(timeStamp) {
 function gameOverSurvey6() {
     cancelAnimationFrame(gameLoopSurvey6);
     endScreenSurvey6();
-    init6();
+    initSurvey6();
 }
 
 var difKeyLevelSurvey = { // need start, render, gameloop?, end

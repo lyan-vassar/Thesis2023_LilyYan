@@ -33,15 +33,19 @@ var isPlayerAlive;
 var victoryCondition;
 var playAgainButton;
 var successOneButton;
+var hintButton;
+var hintGif;
+var hintUsed = false;
 var instructionsField;
 var numberOfDeaths = 0;
 // var timer;
 // var timePassed = 0;
 
 
-window.addEventListener("load", init0);
+window.addEventListener("load", initSurvey0);
 
-function init0() {
+
+function initSurvey0() {
     //startButton = document.getElementById("startButton");
     player = {
         x: 300,
@@ -104,6 +108,10 @@ function init0() {
     // timer = document.getElementById("timer");
     playAgainButton = document.getElementById("playAgain");
     successOneButton = document.getElementById("successOne");
+    hintButton = document.getElementById("hint");
+
+    //hintGif = document.getElementById("hintAnimation");
+    //hintGif.src = "basic_hint.gif";
 
 }
 
@@ -432,6 +440,9 @@ function endScreenLoop0() {
         ctx.fillText("Success!", 50, 100);
         playAgainButton.hidden = false;
 
+        hintButton.hidden = true;
+        document.getElementById("hintAnimation").hidden = true;
+
         document.removeEventListener("keydown",keyDown);
         document.removeEventListener("keyup",keyUp);
     }
@@ -480,7 +491,7 @@ function endScreenLoop0() {
 // ok here we go with the actual game
 function startSurvey0() {
     //console.log(door.unlocked);
-    init0();
+    initSurvey0();
     //startButton.style.display = "none";
     playAgainButton.hidden = true;
     canvas=document.getElementById("canvas");
@@ -580,7 +591,7 @@ function gameOverSurvey0() { // if game is over
     //endScreen0();
     endScreenLoop0(); 
 
-    init0();
+    initSurvey0();
 }
 
 function isGameWon(){

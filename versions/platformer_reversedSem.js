@@ -29,10 +29,13 @@ var isOver;
 var victoryCondition;
 var playAgainButton;
 var successOneButton;
+var hintButton;
+var hintGif;
+var hintUsed = false;
 var instructionsField;
 var numberOfDeaths = 0;
-// var timer;
-// var timePassed = 0;
+var initialTimeCollected = false;
+var startTime = 0;
 
 
 window.addEventListener("load", init3);
@@ -121,6 +124,10 @@ function init3() {
     // timer = document.getElementById("timer");
     playAgainButton = document.getElementById("playAgain");
     successOneButton = document.getElementById("successOne");
+
+    hintButton = document.getElementById("hint");
+    hintGif = document.getElementById("hintAnimation");
+    hintGif.src = "hints/reversed_sem.gif";
 
 }
 
@@ -436,6 +443,9 @@ function endScreen3() {
 
         document.removeEventListener("keydown",keyDown);
         document.removeEventListener("keyup",keyUp);
+
+        jsPsych.data.get().addToAll({deaths: numberOfDeaths});
+        jsPsych.data.get().addToAll({hintNeeded: hintUsed});
     }
 
     else if (!isPlayerAlive) {
@@ -485,9 +495,11 @@ function gameLoop3(timeStamp) {
     renderSpikes3();
     renderPlatforms3();
     if (!starkey.collected) renderStarKey3();
-    //checkLadderClimb3();
-    // timePassed += Math.round(timeStamp / 1000);
-    // timer.innerHTML = "Timer: " + timePassed;
+    
+    if (!initialTimeCollected) {
+        initialTimeCollected = true;
+        startTime = timeStamp;
+    }
 
     // if player is not jumping, apply friction. otherwise apply gravity
     if (player.jump == false) {
@@ -521,6 +533,11 @@ function gameLoop3(timeStamp) {
 
     // if win condition is met, end game
     openDoor3();
+
+    if ((timeStamp - startTime) >= 240000 && !hintUsed) {
+        hintButton.hidden = false;
+        hintUsed = true;
+    } 
 
     if (victoryCondition || !isPlayerAlive || isOver) gameOver3();
 

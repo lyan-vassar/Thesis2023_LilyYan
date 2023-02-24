@@ -28,9 +28,9 @@ var numberOfDeaths = 0;
 // var timePassed = 0;
 
 
-window.addEventListener("load", init7);
+window.addEventListener("load", initSurvey7);
 
-function init7() {
+function initSurvey7() {
     startButton = document.getElementById("startButton");
     player = {
         x: 200,
@@ -94,13 +94,14 @@ function init7() {
     // timer = document.getElementById("timer");
     playAgainButton = document.getElementById("playAgain");
     successOneButton = document.getElementById("successOne");
+    hintButton = document.getElementById("hint");
 
 }
 
 // render canvas
 function renderCanvas7() {
     ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, 550, 300);
+    ctx.fillRect(0, 0, 550, 550);
 }
 
 // render player
@@ -441,12 +442,12 @@ function endScreenSurvey7() {
 
 // ok here we go with the actual game
 function startSurvey7() {
-    init7();
+    initSurvey7();
     //startButton.style.display = "none";
     playAgainButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
-    ctx.canvas.height = 300;
+    ctx.canvas.height = 550;
     ctx.canvas.width = 550;
     createPlatforms7();
     createSpikes7();
@@ -519,7 +520,7 @@ function gameLoopSurvey7(timeStamp) {
 function gameOverSurvey7() {
     cancelAnimationFrame(gameLoopSurvey7);
     endScreenSurvey7();
-    init7();
+    initSurvey7();
 }
 
 

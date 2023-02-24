@@ -34,13 +34,18 @@ var isPlayerAlive;
 var victoryCondition;
 var playAgainButton;
 var successOneButton;
+var hintButton;
+var hintGif;
+var hintUsed = false;
 var instructionsField;
 var numberOfDeaths = 0;
-// var timer;
-// var timePassed = 0;
+var initialTimeCollected = false;
+var startTime = 0;
 
 
 window.addEventListener("load", init0);
+
+// document.getElementById("hintOption").innerHTML += '<img id="hintAnimation" src="basic_hint.gif" width="550" height="300"><button type="button" id="hint" hidden>Need a hint?</button>';
 
 function init0() {
     //startButton = document.getElementById("startButton");
@@ -106,6 +111,11 @@ function init0() {
     // timer = document.getElementById("timer");
     playAgainButton = document.getElementById("playAgain");
     successOneButton = document.getElementById("successOne");
+    //document.getElementById("hintOption").innerHTML += '<img id="hintAnimation" src="images/fire.png" width="550" height="300"><button type="button" id="hint" hidden>Need a hint?</button>';
+
+    hintButton = document.getElementById("hint");
+    hintGif = document.getElementById("hintAnimation");
+    hintGif.src = "hints/basic.gif";
 
 }
 
@@ -438,10 +448,15 @@ function endScreen0() {
         ctx.fillText("Success!", 50, 100);
         successOneButton.hidden = false;
 
+        hintButton.hidden = true;
+        hintAnimation = document.getElementById("hintAnimation");
+        hintAnimation.style.display = "none";
+
         document.removeEventListener("keydown",keyDown);
         document.removeEventListener("keyup",keyUp);
 
         jsPsych.data.get().addToAll({deaths: numberOfDeaths});
+        jsPsych.data.get().addToAll({hintNeeded: hintUsed});
     }
 
     else if (!isPlayerAlive) {
@@ -494,7 +509,7 @@ function start0() {
     createSpikes0();
     document.addEventListener("keydown",keyDown);
     document.addEventListener("keyup",keyUp);
-    // timePassed = 0;
+    //timePassed = 0;
 
     window.requestAnimationFrame(gameLoop0);
 }
@@ -517,7 +532,10 @@ function gameLoop0(timeStamp) {
     renderPlatforms0();
     //checkLadderClimb0();
     closestPlatform();
-    // timePassed += Math.round(timeStamp / 1000);
+    if (!initialTimeCollected) {
+        initialTimeCollected = true;
+        startTime = timeStamp;
+    }
     // timer.innerHTML = "Timer: " + timePassed;
 
     // if player is not jumping, apply friction; otherwise apply gravity
@@ -559,12 +577,19 @@ function gameLoop0(timeStamp) {
     //basicLevel.gameWon = isGameWon;
     //console.log("basic level: " + basicLevel.gameWon());
 
+    //console.log(timeStamp - startTime);
+    if ((timeStamp - startTime) >= 240000 && !hintUsed) {
+        hintButton.hidden = false;
+        hintUsed = true;
+    } 
+
     // game ends if you win, or if you die
     if (victoryCondition || !isPlayerAlive) {
         gameOver0();
     }
 
     else window.requestAnimationFrame(gameLoop0);
+
 }
 
 function gameOver0() { // if game is over
@@ -587,5 +612,5 @@ var basicLevel = { // need start, render, gameloop?, end
     start: start0,
     gameWon: isGameWon,
     verName: "basic",
-    deaths: numberOfDeaths
+    hint: "basic_hint.gif"
 }

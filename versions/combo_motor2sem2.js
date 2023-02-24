@@ -30,6 +30,8 @@ var instructionsField;
 var numberOfDeaths = 0;
 // var timer;
 // var timePassed = 0;
+var initialTimeCollected = false;
+var startTime = 0;
 
 
 window.addEventListener("load", init7);
@@ -99,12 +101,16 @@ function init7() {
     playAgainButton = document.getElementById("playAgain");
     successOneButton = document.getElementById("successOne");
 
+    hintButton = document.getElementById("hint");
+    hintGif = document.getElementById("hintAnimation");
+    hintGif.src = "hints/gravity.gif";
+
 }
 
 // render canvas
 function renderCanvas7() {
     ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, 550, 300);
+    ctx.fillRect(0, 0, 550, 550);
 }
 
 // render player
@@ -429,6 +435,9 @@ function endScreen7() {
 
         document.removeEventListener("keydown",keyDown);
         document.removeEventListener("keyup",keyUp);
+
+        jsPsych.data.get().addToAll({deaths: numberOfDeaths});
+        jsPsych.data.get().addToAll({hintNeeded: hintUsed});
     }
 
     else if (!isPlayerAlive) {
@@ -450,7 +459,7 @@ function start7() {
     playAgainButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
-    ctx.canvas.height = 300;
+    ctx.canvas.height = 550;
     ctx.canvas.width = 550;
     createPlatforms7();
     createSpikes7();
@@ -480,6 +489,10 @@ function gameLoop7(timeStamp) {
     //checkLadderClimb7();
     // timePassed += Math.round(timeStamp / 1000);
     // timer.innerHTML = "Timer: " + timePassed;
+    if (!initialTimeCollected) {
+        initialTimeCollected = true;
+        startTime = timeStamp;
+    }
 
     // if player is not jumping, apply friction. otherwise apply gravity
     if (player.jump == false) {
@@ -514,6 +527,11 @@ function gameLoop7(timeStamp) {
     // if win condition is met, end game
     //isWin();
     openDoor7();
+
+    if ((timeStamp - startTime) >= 240000 && !hintUsed) {
+        hintButton.hidden = false;
+        hintUsed = true;
+    } 
 
     if (victoryCondition || !isPlayerAlive || isOver) gameOver7();
 

@@ -23,10 +23,13 @@ var isOver;
 var victoryCondition;
 var playAgainButton;
 var successOneButton;
+var hintButton;
+var hintGif;
+var hintUsed = false;
 var instructionsField;
 var numberOfDeaths = 0;
-// var timer;
-// var timePassed = 0;
+var initialTimeCollected = false;
+var startTime = 0;
 
 
 window.addEventListener("load", init2);
@@ -95,6 +98,10 @@ function init2() {
     // timer = document.getElementById("timer");
     playAgainButton = document.getElementById("playAgain");
     successOneButton = document.getElementById("successOne");
+
+    hintButton = document.getElementById("hint");
+    hintGif = document.getElementById("hintAnimation");
+    hintGif.src = "hints/basic.gif";
 
 }
 
@@ -415,6 +422,9 @@ function endScreen2() {
 
         document.removeEventListener("keydown",keyDown);
         document.removeEventListener("keyup",keyUp);
+
+        jsPsych.data.get().addToAll({deaths: numberOfDeaths});
+        jsPsych.data.get().addToAll({hintNeeded: hintUsed});
     }
 
     else if (!isPlayerAlive) {
@@ -463,9 +473,11 @@ function gameloop2(timeStamp) {
     renderGround2();
     renderSpikes2();
     renderPlatforms2();
-    //checkLadderClimb2();
-    // timePassed += Math.round(timeStamp / 1000);
-    // timer.innerHTML = "Timer: " + timePassed;
+    
+    if (!initialTimeCollected) {
+        initialTimeCollected = true;
+        startTime = timeStamp;
+    }
 
     // if player is not jumping, apply friction. otherwise apply gravity
     if (player.jump == false) {
@@ -499,6 +511,11 @@ function gameloop2(timeStamp) {
 
     // if win condition is met, end game
     openDoor2();
+
+    if ((timeStamp - startTime) >= 240000 && !hintUsed) {
+        hintButton.hidden = false;
+        hintUsed = true;
+    } 
 
     if (victoryCondition || !isPlayerAlive || isOver) gameOver2();
 

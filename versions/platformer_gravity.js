@@ -24,10 +24,13 @@ var isOver;
 var victoryCondition;
 var playAgainButton;
 var successOneButton;
+var hintButton;
+var hintGif;
+var hintUsed = false;
 var instructionsField;
 var numberOfDeaths = 0;
-// var timer;
-// var timePassed = 0;
+var initialTimeCollected = false;
+var startTime = 0;
 
 
 window.addEventListener("load", init4);
@@ -94,12 +97,16 @@ function init4() {
     playAgainButton = document.getElementById("playAgain");
     successOneButton = document.getElementById("successOne");
 
+    hintButton = document.getElementById("hint");
+    hintGif = document.getElementById("hintAnimation");
+    hintGif.src = "hints/gravity.gif";
+
 }
 
 // render canvas
 function renderCanvas4() {
     ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, 550, 300);
+    ctx.fillRect(0, 0, 550, 550);
 }
 
 // render player
@@ -391,6 +398,9 @@ function endScreen4() {
 
         document.removeEventListener("keydown",keyDown);
         document.removeEventListener("keyup",keyUp);
+
+        jsPsych.data.get().addToAll({deaths: numberOfDeaths});
+        jsPsych.data.get().addToAll({hintNeeded: hintUsed});
     }
 
     else if (!isPlayerAlive) {
@@ -412,7 +422,7 @@ function start4() {
     playAgainButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
-    ctx.canvas.height = 300;
+    ctx.canvas.height = 550;
     ctx.canvas.width = 550;
     createPlatforms4();
     createSpikes4();
@@ -439,9 +449,11 @@ function gameLoop4(timeStamp) {
     renderGround4();
     renderSpikes4();
     renderPlatforms4();
-    //checkLadderClimb4();
-    // timePassed += Math.round(timeStamp / 1000);
-    // timer.innerHTML = "Timer: " + timePassed;
+
+    if (!initialTimeCollected) {
+        initialTimeCollected = true;
+        startTime = timeStamp;
+    }
 
     // if player is not jumping, apply friction. otherwise apply gravity
     if (player.jump == false) {
@@ -475,6 +487,11 @@ function gameLoop4(timeStamp) {
 
     // if win condition is met, end game
     openDoor4();
+
+    if ((timeStamp - startTime) >= 240000 && !hintUsed) {
+        hintButton.hidden = false;
+        hintUsed = true;
+    } 
 
     if (victoryCondition || !isPlayerAlive || isOver) gameOver4();
 
