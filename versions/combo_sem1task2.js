@@ -438,6 +438,10 @@ function endScreen8() {
         ctx.fillText("Success!", 50, 100);
         successOneButton.hidden = false;
 
+        hintButton.hidden = true;
+        hintAnimation = document.getElementById("hintAnimation");
+        hintAnimation.style.display = "none";
+
         document.removeEventListener("keydown",keyDown);
         document.removeEventListener("keyup",keyUp);
 

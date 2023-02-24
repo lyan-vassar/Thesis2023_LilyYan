@@ -463,7 +463,10 @@ function endScreen5() {
     if (victoryCondition) {
         ctx.fillText("Success!", 50, 100);
         successOneButton.hidden = false;
-
+        
+        hintButton.hidden = true;
+        hintGif.style.display = "none";
+        
         document.removeEventListener("keydown",keyDown);
         document.removeEventListener("keyup",keyUp);
 
