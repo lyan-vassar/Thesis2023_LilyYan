@@ -65,7 +65,7 @@
   font-family: "Open Sans", "Arial", sans-serif;
   cursor: pointer;
   line-height: 1.4;
-  text-align: center;
+  /*text-align: center;*/
   white-space: nowrap;
   vertical-align: middle;
   background-image: none;
@@ -204,3 +204,54 @@
 #jspsych-data-display {
   text-align: left;
 }
+
+p#jspsych-survey-text {
+  text-align: right;
+}
+
+.gameButton {
+  /* display: inline-block; */
+  padding: 6px 12px;
+  margin: 0px;
+  font-size: 14px;
+  font-weight: 400;
+  font-family: "Open Sans", "Arial", sans-serif;
+  cursor: pointer;
+  line-height: 1.4;
+  /*text-align: center;*/
+  white-space: nowrap;
+  vertical-align: middle;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
+}
+
+#playAgain {
+  position: absolute;
+  top: 350px;
+  left: 550px;
+}
+
+#successOne {
+  position: absolute;
+  top: 350px;
+  left: 550px;
+}
+
+#hint {
+  position: absolute;
+  top: 150px;
+  left: 540px;
+}
+
+#playAgainSurvey {
+  /* display: inline-block; */
+  position: absolute;
+  top: 200px;
+  left: 550px;
+}
+
+
