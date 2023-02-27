@@ -98,12 +98,8 @@ var jsPsychGameSurvey = (function (jspsych) {
 
         display_element.innerHTML = `
         <div id="game">
-            <div id="intro">
-                <!--<button type="button" id="startButton">START</button>-->
-            </div>
-            <!--<div id="timer"> Timer: 0</div>-->
             <div id="end">
-                <button type="button" id="playAgain" hidden>TRY AGAIN</button>
+                <button type="button" id="playAgainSurvey" class="gameButton" hidden>TRY AGAIN</button>
             </div>
             <canvas id="canvas"></canvas>
         </div>
@@ -245,7 +241,7 @@ var jsPsychGameSurvey = (function (jspsych) {
             });
             var startTime = performance.now();
 
-            display_element.querySelector("#playAgain").addEventListener('click', trial.start);
+            display_element.querySelector("#playAgainSurvey").addEventListener('click', trial.start);
 
             trial.start();
         }

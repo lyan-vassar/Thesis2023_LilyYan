@@ -52,15 +52,11 @@ var jsPsychGame = (function (jspsych) {
 
             display_element.innerHTML = `
         <div id="game">
-            <div id="intro">
-                <!--<button type="button" id="startButton">START</button>-->
-            </div>
-            <!--<div id="timer"> Timer: 0</div>-->
             <div id="end">
-                <button type="button" id="playAgain" hidden>TRY AGAIN</button>
-                <button type="button" id="successOne" hidden>CONTINUE</button>
+                <button type="button" id="playAgain" class="gameButton" hidden>TRY AGAIN</button>
+                <button type="button" id="successOne" class="gameButton" hidden>CONTINUE</button>
                 <img id="hintAnimation" src="images/fire.png" width="550" height="300">
-                <button type="button" id="hint" hidden>Need a hint?</button>
+                <button type="button" id="hint" class="gameButton" hidden>Need a hint?</button>
             </div>
             <div id="hintOption">
             </div>

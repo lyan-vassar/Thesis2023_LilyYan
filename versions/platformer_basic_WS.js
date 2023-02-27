@@ -31,7 +31,7 @@ var winSequence;
 var currentSequence;
 var isPlayerAlive;
 var victoryCondition;
-var playAgainButton;
+var playAgainSurveyButton;
 var successOneButton;
 var hintButton;
 var hintGif;
@@ -106,7 +106,7 @@ function initSurvey0() {
     isPlayerAlive = true;
     victoryCondition = false;
     // timer = document.getElementById("timer");
-    playAgainButton = document.getElementById("playAgain");
+    playAgainSurveyButton = document.getElementById("playAgainSurvey");
     successOneButton = document.getElementById("successOne");
     hintButton = document.getElementById("hint");
 
@@ -429,61 +429,23 @@ function isWin() {
     }
 }*/
 
-// function to display end screen
-function endScreenLoop0() {
-    renderCanvas0();
-
-    ctx.fillStyle = "black";
-    ctx.font = "48px arial";
-    ctx.textBaseline = "middle";
-    if (victoryCondition) {
-        ctx.fillText("Success!", 50, 100);
-        playAgainButton.hidden = false;
-
-        hintButton.hidden = true;
-        document.getElementById("hintAnimation").hidden = true;
-
-        document.removeEventListener("keydown",keyDown);
-        document.removeEventListener("keyup",keyUp);
-    }
-
-    else if (!isPlayerAlive) {
-        ctx.fillText("You have died.", 50, 100);
-        ctx.fillText("Please try again.", 50, 150);
-        playAgainButton.hidden = false;
-        numberOfDeaths += 1;
-    }
-
-    else ctx.fillText("Incorrect sequence. Please try again.", 50, 100);
-
-    //playAgainButton.hidden = false;
-    //playAgainButton.removeAttribute("hidden");
-    //playAgainButton.style.visibility = "visible";
-}
-
 // function to display end screen with play again fxn
 function endScreenLoop0() {
     renderCanvas0();
 
     ctx.fillStyle = "black";
-    ctx.font = "48px arial";
+    ctx.textAlign = "center";
+    ctx.font = "48px open sans";
     ctx.textBaseline = "middle";
     if (victoryCondition) {
-        ctx.fillText("Success!", 50, 100);
-        playAgainButton.hidden = false;
+        ctx.fillText("You won!", ctx.canvas.width/2, 100);
+        playAgainSurveyButton.hidden = false;
     }
 
     else if (!isPlayerAlive) {
-        ctx.fillText("You have died.", 50, 100);
-        ctx.fillText("Please try again.", 50, 150);
-        playAgainButton.hidden = false;
+        ctx.fillText("You lost.", ctx.canvas.width/2, 100);
+        playAgainSurveyButton.hidden = false;
     }
-
-    else ctx.fillText("Incorrect sequence. Please try again.", 50, 100);
-
-    //playAgainButton.hidden = false;
-    //playAgainButton.removeAttribute("hidden");
-    //playAgainButton.style.visibility = "visible";
 }
 
 
@@ -493,7 +455,7 @@ function startSurvey0() {
     //console.log(door.unlocked);
     initSurvey0();
     //startButton.style.display = "none";
-    playAgainButton.hidden = true;
+    playAgainSurveyButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
     ctx.canvas.height = 300;
@@ -508,7 +470,7 @@ function startSurvey0() {
 }
 
 /*function startAgain() {
-    playAgainButton.style.visibility = "hidden";
+    playAgainSurveyButton.style.visibility = "hidden";
     renderCanvas();
     //window.requestAnimationFrame(gameLoop);
 }*/

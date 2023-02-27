@@ -24,7 +24,7 @@ var currentSequence;
 var isPlayerAlive;
 var isOver;
 var victoryCondition;
-var playAgainButton;
+var playAgainSurveyButton;
 var successOneButton;
 var instructionsField;
 var numberOfDeaths = 0;
@@ -96,7 +96,7 @@ function initSurvey6() {
     isOver = false;
     victoryCondition = false;
     // timer = document.getElementById("timer");
-    playAgainButton = document.getElementById("playAgain");
+    playAgainSurveyButton = document.getElementById("playAgainSurvey");
     successOneButton = document.getElementById("successOne");
     hintButton = document.getElementById("hint");
 
@@ -404,30 +404,20 @@ function playerAlive6() {
 // function to display end screen
 function endScreenSurvey6() {
     renderCanvas6();
-    //playAgainButton.style.visibility = "visible";
 
     ctx.fillStyle = "black";
-    ctx.font = "48px arial";
+    ctx.textAlign = "center";
+    ctx.font = "48px open sans";
     ctx.textBaseline = "middle";
     if (victoryCondition) {
-        ctx.fillText("Success!", 50, 100);
-        playAgainButton.hidden = false;
-
-        document.removeEventListener("keydown",keyDown);
-        document.removeEventListener("keyup",keyUp);
+        ctx.fillText("You won!", ctx.canvas.width/2, 100);
+        playAgainSurveyButton.hidden = false;
     }
 
     else if (!isPlayerAlive) {
-        ctx.fillText("You have died.", 50, 100);
-        ctx.fillText("Please try again.", 50, 150);
-        playAgainButton.hidden = false;
-        numberOfDeaths += 1;
+        ctx.fillText("You lost.", ctx.canvas.width/2, 100);
+        playAgainSurveyButton.hidden = false;
     }
-
-    else ctx.fillText("Incorrect sequence. Please try again.", 50, 100);
-
-    //playAgainButton.removeAttribute("hidden");
-    //playAgainButton.style.visibility = "visible";
 }
 
 
@@ -436,7 +426,7 @@ function endScreenSurvey6() {
 function startSurvey6() {
     initSurvey6();
     //startButton.style.display = "none";
-    playAgainButton.hidden = true;
+    playAgainSurveyButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
     ctx.canvas.height = 300;

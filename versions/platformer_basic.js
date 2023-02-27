@@ -442,10 +442,11 @@ function endScreen0() {
     renderCanvas0();
 
     ctx.fillStyle = "black";
-    ctx.font = "48px arial";
+    ctx.textAlign = "center";
+    ctx.font = "48px open sans";
     ctx.textBaseline = "middle";
     if (victoryCondition) {
-        ctx.fillText("Success!", 50, 100);
+        ctx.fillText("You won!", ctx.canvas.width/2, 100);
         successOneButton.hidden = false;
 
         hintButton.hidden = true;
@@ -459,13 +460,10 @@ function endScreen0() {
     }
 
     else if (!isPlayerAlive) {
-        ctx.fillText("You have died.", 50, 100);
-        ctx.fillText("Please try again.", 50, 150);
+        ctx.fillText("You lost.", ctx.canvas.width/2, 100);
         playAgainButton.hidden = false;
         numberOfDeaths += 1;
     }
-
-    //else ctx.fillText("Incorrect sequence. Please try again.", 50, 100);
 }
 
 // function to display end screen with play again fxn
