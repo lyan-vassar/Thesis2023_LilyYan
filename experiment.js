@@ -35,12 +35,12 @@ var versionNum = jsPsych.randomization.sampleWithoutReplacement([0, 1, 2, 3, 4, 
 
 // for debug purposes, comment out when done 
 
-// var currLevel = comboMotor2Sem2;
-// var levelPrompt = comboMotor2Sem2Survey;
+var currLevel = basicLevel;
+var levelPrompt = basicLevelSurvey;
 
 // comment back in for final version
-var currLevel = levels[versionNum];
-var levelPrompt = levelSurveys[versionNum];
+// var currLevel = levels[versionNum];
+// var levelPrompt = levelSurveys[versionNum];
 
 
 // will add version number to data frame
@@ -61,7 +61,7 @@ timeline.push(welcome);
 // Instructions
 var instructions = {
     type: jsPsychHtmlKeyboardResponse,
-    stimulus: "<p>In this experiment, you will be presented with a basic platformer level, which is a two-dimensional game consisting of an avatar you can control and platforms you can jump between. Your goal is to figure out how to win the level, and complete it as quickly as possible.</p><p>If you are unable to complete it within five minutes, an option to view a hint will be given to you, where you will get to see what a successful run of the level looks like.</p><p>Once you have completed the level once, you will be prompted to produce instructions on how to win the level. Imagine you are trying to explain how to play and win it to someone who has never seen or played it before. You will be allowed to replay the level as much as you’d like until you submit your instructions.</p><p>To begin the experiment, hit the space bar.</p>",
+    stimulus: "<p>In this experiment, you will be presented with a basic platformer level, which is a two-dimensional game consisting of an avatar you can control using certain keys on your keyboard, and platforms you can jump between. Your goal is to figure out how to win the level, and complete it as quickly as possible.</p><p>If you are unable to complete it within five minutes, an option to view a hint will be given to you, where you will get to see what a successful run of the level looks like.</p><p>Once you have completed the level once, you will be prompted to produce instructions on how to win the level. Imagine you are trying to explain how to play and win it to someone who has never seen or played it before. You will be allowed to replay the level as much as you’d like until you submit your instructions.</p><p>To begin the experiment, hit the space bar.</p>",
     choice: [" "],
 };
 
