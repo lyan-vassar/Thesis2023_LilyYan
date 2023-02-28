@@ -233,18 +233,21 @@ p#jspsych-survey-text {
   position: absolute;
   top: 350px;
   left: 50%; 
+  transform: translateX(-50%);
 }
 
 #successOne {
   position: absolute;
   top: 350px;
   left: 50%;
+  transform: translateX(-50%);
 }
 
 #hint {
   position: absolute;
   top: 150px;
   left: 50%; 
+  transform: translateX(-50%);
 }
 
 #playAgainSurvey {
@@ -252,6 +255,7 @@ p#jspsych-survey-text {
   position: absolute;
   top: 200px;
   left: 50%; 
+  transform: translateX(-50%);
 }
 
 

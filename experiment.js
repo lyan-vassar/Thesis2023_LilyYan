@@ -51,7 +51,8 @@ jsPsych.data.addProperties({
 
 var welcome = {
     type: jsPsychHtmlKeyboardResponse,
-    stimulus: "Welcome to the experiment! Press any key to begin."
+    stimulus: "Welcome to the experiment! Press the 'b' key to begin.",
+    choices: 'b'
 };
 
 timeline.push(welcome);
@@ -60,9 +61,9 @@ timeline.push(welcome);
 /* RUNNING THE EXPERIMENT */
 // Instructions
 var instructions = {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: "<p>In this experiment, you will be presented with a basic platformer level, which is a two-dimensional game consisting of an avatar you can control using certain keys on your keyboard, and platforms you can jump between. Your goal is to figure out how to win the level, and complete it as quickly as possible.</p><p>If you are unable to complete it within four minutes, an option to view a hint will be given to you, where you will get to see what a successful run of the level looks like.</p><p>Once you have completed the level once, you will be prompted to produce instructions on how to win the level. Imagine you are trying to explain how to play and win it to someone who has never seen or played it before. You will be allowed to replay the level as much as you’d like until you submit your instructions.</p><p>To begin the experiment, hit the space bar.</p>",
-    choice: [" "],
+    type: jsPsychHtmlButtonResponse,
+    stimulus: "<p>In this experiment, you will be presented with a basic platformer level, which is a two-dimensional game consisting of an avatar you can control using certain keys on your keyboard, and platforms you can jump between. <em>You will not be given instructions on how to win the level.</em> Your goal is to figure out how to win, and complete it as quickly as possible.</p><p>If you are unable to complete it within four minutes, an option to view a hint will be given to you, where you will get to see what a successful run of the level looks like.</p><p>Once you have completed the level once, you will be prompted to produce instructions on how to win the level. Imagine you are trying to explain how to play and win it to someone who has never seen or played it before. You will be allowed to replay the level as much as you’d like until you submit your instructions.</p><p>To begin the experiment, click the button below.</p>",
+    choices: ["Begin"]
 };
 
 timeline.push(instructions);
@@ -97,8 +98,8 @@ timeline.push(currLevel);
 // instructions for second part
 var instructionsPt2 = {
   type: jsPsychHtmlKeyboardResponse,
-  stimulus: "<p>Congratulations! You have successfully completed the level.</p><p>You will now be asked to write instructions on how to complete the level. As a reminder, imagine you are trying to explain how to play and win the level to someone who has never seen or played the level before. You will be allowed to replay the level as much as you’d like until you submit your instructions.</p><p>Press any key to continue.</p>",
-  choice: [" "],
+  stimulus: "<p>Congratulations! You have successfully completed the level.</p><p>You will now be asked to write instructions on how to complete the level. As a reminder, imagine you are trying to explain how to play and win the level to someone who has never seen or played the level before. You will be allowed to replay the level as much as you’d like until you submit your instructions.</p><p>Press the 'c' key to continue.</p>",
+  choices: ['c'],
 };
 
 timeline.push(instructionsPt2);
