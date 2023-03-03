@@ -30,13 +30,13 @@ var levels = [basicLevel, invertedControlsLevel, letterControlsLevel, reversedSe
 var levelSurveys = [basicLevelSurvey, invertedControlsLevelSurvey, letterControlsLevelSurvey, reversedSemLevelSurvey, gravityLevelSurvey, sequenceWinLevelSurvey, difKeyLevelSurvey, comboMotor2Sem2Survey, comboSem1Task2Survey, comboMotor1Task1Survey];
 
 // Randomly chooses version the subject gets
-var versionNum = jsPsych.randomization.sampleWithoutReplacement([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 1)[0];
-//var versionNum = jsPsych.randomization.sampleWithoutReplacement([0, 1], 1)[0];
+//var versionNum = jsPsych.randomization.sampleWithoutReplacement([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 1)[0];
+versionNum = 7;
 
 // for debug purposes, comment out when done 
 
-var currLevel = letterControlsLevel;
-var levelPrompt = letterControlsLevelSurvey;
+var currLevel = comboMotor2Sem2;
+var levelPrompt = comboMotor2Sem2Survey;
 
 // comment back in for final version
 // var currLevel = levels[versionNum];
