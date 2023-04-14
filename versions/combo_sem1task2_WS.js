@@ -9,7 +9,6 @@ var numPlatforms;
 var platforms;
 var ladder;
 var starkey;
-//const ghost = new Image();
 var door;
 var keys;
 var spikes;
@@ -25,14 +24,11 @@ var playAgainSurveyButton;
 var successOneButton;
 var instructionsField;
 var numberOfDeaths = 0;
-// var timer;
-// var timePassed = 0;
 
 
 window.addEventListener("load", initSurvey8);
 
 function initSurvey8() {
-    //startButton = document.getElementById("startButton");
     player = {
         x: 300,
         y: 200,
@@ -93,7 +89,6 @@ function initSurvey8() {
     isPlayerAlive = true;
     isOver = false;
     victoryCondition = false;
-    // timer = document.getElementById("timer");
     playAgainSurveyButton = document.getElementById("playAgainSurvey");
     successOneButton = document.getElementById("successOne");
     hintButton = document.getElementById("hint");
@@ -126,18 +121,6 @@ function renderStarKey8() {
 
 // render door
 function renderDoor8() {
-    /*ctx.strokeSyle = "#000";
-    ctx.beginPath();
-    ctx.moveTo(door.x, door.y);
-    ctx.lineTo(door.x+(door.width/2), door.y-door.height);
-    ctx.lineTo(door.x+door.width, door.y);
-    ctx.lineTo(door.x, door.y);
-    ctx.closePath();
-    ctx.lineWidth=5;
-    ctx.strokeStyle="silver";
-    ctx.stroke();
-    ctx.fillStyle = "silver";
-    ctx.fill();*/
 
     ctx.beginPath(); // first spike
         ctx.moveTo(door.x, door.y); //starting point
@@ -359,18 +342,12 @@ function checkLadderClimb8() {
 
 // function for collecting the starkey
 function checkKeyCollection8() {
-    /*if (starkey.x < player.x && player.x < starkey.x+(starkey.outerRadius*2) &&
-        starkey.y < player.y && player.y < starkey.y+(starkey.outerRadius*2)) {
-            starkey.collected = true;
-            //door.unlocked = true;
-        }*/
-
-        if (((starkey.x < player.x && player.x-player.width < starkey.x) || 
+    if (((starkey.x < player.x && player.x-player.width < starkey.x) || 
         (starkey.x+starkey.width > player.x-player.width && player.x > starkey.x+starkey.width)) &&
         starkey.y <= player.y && player.y-player.height <= starkey.y+starkey.height) {
             starkey.collected = true;
             door.unlocked = true;
-        }
+    }
 }
 
 // function to check if door is reached
@@ -380,20 +357,12 @@ function openDoor8() {
     door.y-door.height < player.y && player.y <= door.y) { // if player reaches door AND door is unlocked
             victoryCondition = true; // you win!
         }
-    /*if (((door.x < player.x && player.x-player.width < door.x) || 
-        (door.x+door.width > player.x-player.width && player.x > door.x+door.width)) &&
-        door.y-door.height < player.y && player.y <= door.y &&
-        door.unlocked) {
-            victoryCondition = true;
-        }*/
 }
 
 // function to check if player died
 function playerAlive8() {
     hazardCollided = false;
     index = 0;
-
-    // test for enemy collision
 
     // test for spike collision
     for (ctr=0; ctr<spikes.length; ctr++) {
@@ -455,7 +424,6 @@ function endScreenSurvey8() {
 // ok here we go with the actual game
 function startSurvey8() {
     initSurvey8();
-    //startButton.style.display = "none";
     playAgainSurveyButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
@@ -465,30 +433,19 @@ function startSurvey8() {
     createSpikes8();
     document.addEventListener("keydown",keyDown8);
     document.addEventListener("keyup",keyUp8);
-    // timePassed = 0;
 
     window.requestAnimationFrame(gameLoopSurvey8);
 }
 
-/*function startAgain() {
-    playAgainButton.style.visibility = "hidden";
-    renderCanvas();
-    //window.requestAnimationFrame(gameLoop);
-}*/
-
 function gameLoopSurvey8(timeStamp) {
     // render everything
     renderCanvas8();
-    //renderLadder8();
     renderPlayer8();
     renderDoor8();
     renderGround8();
     renderSpikes8();
     renderPlatforms8();
     if (!starkey.collected) renderStarKey8();
-    //checkLadderClimb8();
-    // timePassed += Math.round(timeStamp / 1000);
-    // timer.innerHTML = "Timer: " + timePassed;
 
     // if player is not jumping, apply friction. otherwise apply gravity
     if (player.jump == false) {
@@ -521,7 +478,6 @@ function gameLoopSurvey8(timeStamp) {
     playerAlive8();
 
     // if win condition is met, end game
-    //isWin8();
     openDoor8();
 
     if (victoryCondition || !isPlayerAlive || isOver) gameOverSurvey8();
@@ -540,7 +496,6 @@ function gameOverSurvey8() {
 var comboSem1Task2Survey = { // need start, render, gameloop?, end
     type: jsPsychGameSurvey,
     start: startSurvey8,
-    //loop: function(){},
     gameWon: isGameWon,
     verName: "comboS1T2",
     questions: [

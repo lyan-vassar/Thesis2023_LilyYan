@@ -1,17 +1,4 @@
-/* NUMBER 0: BASIC VER
-
-KNOWN ISSUES LIST
-    * ladder glitches sometimes (will make player automatically go up) (sometimes it fixes itself? it's weird)
-    * collision functions are iffy --> MUST EDIT SOON
-    * spike placement on gravity levels should be better
-    
-
-    Things I'd like to clean up
-    * make stars look better (have to figure out what's wrong with my render fxn)
-    * make UI nicer
-    * maybe replace some elements with actual images instead of just shapes
-        * would i have to draw those myself??
-    * slow timer down
+/* NUMBER 0: basic ver
 */
 
 // variables
@@ -19,7 +6,6 @@ var player;
 var ground;
 var numPlatforms;
 var platforms;
-var currClosestPlatform;
 var ladder;
 var starkey;
 var door;
@@ -45,10 +31,7 @@ var startTime = 0;
 
 window.addEventListener("load", init0);
 
-// document.getElementById("hintOption").innerHTML += '<img id="hintAnimation" src="basic_hint.gif" width="550" height="300"><button type="button" id="hint" hidden>Need a hint?</button>';
-
 function init0() {
-    //startButton = document.getElementById("startButton");
     player = {
         x: 300,
         y: 200,
@@ -107,12 +90,8 @@ function init0() {
     gravity = 0.6;
     isPlayerAlive = true;
     victoryCondition = false;
-    currClosestPlatform = 0;
-    // timer = document.getElementById("timer");
     playAgainButton = document.getElementById("playAgain");
     successOneButton = document.getElementById("successOne");
-    //document.getElementById("hintOption").innerHTML += '<img id="hintAnimation" src="images/fire.png" width="550" height="300"><button type="button" id="hint" hidden>Need a hint?</button>';
-
     hintButton = document.getElementById("hint");
     hintGif = document.getElementById("hintAnimation");
     hintGif.src = "hints/basic.gif";
@@ -140,8 +119,6 @@ function renderLadder0() {
 // render starkey
 function renderStarKey0() {
     if (!starkey.collected) { // only render if starkey wasn't collected yet
-        // this is a 5 point star-rendering function I found from online tutorials
-        // it's not perfect; i will try to figure out why
         var rot = Math.PI / 2 * 3;
         var pointX = starkey.x;
         var pointY = starkey.y;
@@ -202,7 +179,6 @@ function createSpikes0() {
 function renderSpikes0() {
     for (ctr=0; ctr<spikes.length; ctr++) {
         // attempting to render it a little differently; three small spikes, not one big one
-        //ctx.strokeSyle = "#000";
         ctx.beginPath(); // first spike
         ctx.moveTo(spikes[ctr].x, spikes[ctr].y); //starting point
         ctx.lineTo(spikes[ctr].x+(spikes[ctr].width/6), spikes[ctr].y-spikes[ctr].height);
@@ -235,9 +211,6 @@ function renderSpikes0() {
 
     }
 }
-
-// render enemy (maybe?)
-
 
 // render ground
 function renderGround0() {
@@ -277,8 +250,8 @@ function keyDown(e) {
 
     // up arrow key = 38
     if (e.keyCode == 38) {
-        if (!player.jump) { // if player's not already in the air 
-            player.y_v = -10; // go up
+        if (!player.jump) { 
+            player.y_v = -10; 
         }
 
         if (player.climb) {
@@ -331,25 +304,6 @@ function keyUp(e) {
     }
 }
 
-// helper function: report platform closest to player
-function closestPlatform() {
-    minDistance = 1000;
-    platformIndex = -1;
-    
-    if (player.y == ground.y) currClosestPlatform = -1; // if on ground, don't do the rest of this
-    else {
-        for (ctr=0; ctr<numPlatforms; ctr++) {
-            currentDistance = platforms[ctr].y - player.y;
-            if (platforms[ctr].x < player.x && player.x-player.width <= platforms[ctr].x + platforms[ctr].width &&
-                currentDistance < minDistance && currentDistance >= 0) {
-                    minDistance = Math.abs(player.y - platforms[ctr].y);
-                    platformIndex = ctr;
-                }
-        }
-        currClosestPlatform = platformIndex;
-    }
-}
-
 // function to check for platform collisions
 function checkCollisions0() { 
     ans = false;
@@ -382,8 +336,7 @@ function checkCollisions0() {
     if (player.x >= ground.width) player.x = ground.width;
 }
 
-// function for climbing the ladder
-// not flawless
+// unused
 function checkLadderClimb0() {
     if (ladder.x < player.x && player.x < ladder.x + ladder.width &&
         ladder.y < player.y && player.y < ladder.y + ladder.height) {
@@ -419,11 +372,8 @@ function playerAlive0() {
     hazardCollided = false;
     index = 0;
 
-    // test for enemy collision
-
     // test for spike collision
     for (ctr=0; ctr<spikes.length; ctr++) {
-        // sorry this next line looks like a mess, it was the best way i could make it work
         if (((spikes[ctr].x < player.x && player.x-player.width < spikes[ctr].x) || 
             (spikes[ctr].x+spikes[ctr].width > player.x-player.width && player.x > spikes[ctr].x+spikes[ctr].width)) &&
             spikes[ctr].y-spikes[ctr].height < player.y && player.y <= spikes[ctr].y) {
@@ -466,37 +416,9 @@ function endScreen0() {
     }
 }
 
-// function to display end screen with play again fxn
-/*function endScreenLoop0() {
-    renderCanvas0();
-
-    ctx.fillStyle = "black";
-    ctx.font = "48px arial";
-    ctx.textBaseline = "middle";
-    if (victoryCondition) {
-        ctx.fillText("Success!", 50, 100);
-        playAgainButton.hidden = false;
-    }
-
-    else if (!isPlayerAlive) {
-        ctx.fillText("You have died.", 50, 100);
-        ctx.fillText("Please try again.", 50, 150);
-        playAgainButton.hidden = false;
-    }
-
-    else ctx.fillText("Incorrect sequence. Please try again.", 50, 100);
-
-    //playAgainButton.hidden = false;
-    //playAgainButton.removeAttribute("hidden");
-    //playAgainButton.style.visibility = "visible";
-}*/
-
-
-
-// ok here we go with the actual game
+// actual game
 function start0() {
     init0();
-    //startButton.style.display = "none";
     playAgainButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
@@ -506,34 +428,23 @@ function start0() {
     createSpikes0();
     document.addEventListener("keydown",keyDown);
     document.addEventListener("keyup",keyUp);
-    //timePassed = 0;
 
     window.requestAnimationFrame(gameLoop0);
 }
 
-/*function startAgain() {
-    playAgainButton.style.visibility = "hidden";
-    renderCanvas();
-    //window.requestAnimationFrame(gameLoop);
-}*/
-
 function gameLoop0(timeStamp) {
     // render everything
     renderCanvas0();
-    //renderLadder0();
     renderPlayer0();
     renderStarKey0();
     renderDoor0();
     renderGround0();
     renderSpikes0();
     renderPlatforms0();
-    //checkLadderClimb0();
-    closestPlatform();
     if (!initialTimeCollected) {
         initialTimeCollected = true;
         startTime = timeStamp;
     }
-    // timer.innerHTML = "Timer: " + timePassed;
 
     // if player is not jumping, apply friction; otherwise apply gravity
     if (player.jump == false) {
@@ -560,21 +471,14 @@ function gameLoop0(timeStamp) {
     if (player.y_v >= 10) player.y_v = 10;
     player.y += player.y_v;
 
-    //player.climb = false;
-
     // check for collisions with platform
     checkCollisions0();
     checkKeyCollection0();
     playerAlive0();
 
     // if win condition is met, end game
-    //isWin0();
     openDoor0();
 
-    //basicLevel.gameWon = isGameWon;
-    //console.log("basic level: " + basicLevel.gameWon());
-
-    //console.log(timeStamp - startTime);
     if ((timeStamp - startTime) >= 240000 && !hintUsed) {
         hintButton.hidden = false;
         hintUsed = true;
@@ -591,20 +495,15 @@ function gameLoop0(timeStamp) {
 
 function gameOver0() { // if game is over
     cancelAnimationFrame(gameLoop0);
-
-    // add something to be able to toggle btwn these two
     endScreen0();
-    //endScreenLoop0(); 
-
     init0();
 }
 
 function isGameWon(){
-    //return (victoryCondition || !isPlayerAlive);
     return victoryCondition;
 }
 
-var basicLevel = { // need start, render, gameloop?, end
+var basicLevel = { 
     type: jsPsychGame,
     start: start0,
     gameWon: isGameWon,

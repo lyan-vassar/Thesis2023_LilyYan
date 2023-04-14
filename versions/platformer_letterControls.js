@@ -35,7 +35,6 @@ var startTime = 0;
 window.addEventListener("load", init2);
 
 function init2() {
-    //startButton = document.getElementById("startButton");
     player = {
         x: 300,
         y: 200,
@@ -95,7 +94,6 @@ function init2() {
     isPlayerAlive = true;
     isOver = false;
     victoryCondition = false;
-    // timer = document.getElementById("timer");
     playAgainButton = document.getElementById("playAgain");
     successOneButton = document.getElementById("successOne");
 
@@ -185,7 +183,6 @@ function createSpikes2() {
 function renderSpikes2() {
     for (ctr=0; ctr<spikes.length; ctr++) {
         // attempting to render it a little differently; three small spikes, not one big one
-        //ctx.strokeSyle = "#000";
         ctx.beginPath(); // first spike
         ctx.moveTo(spikes[ctr].x, spikes[ctr].y); //starting point
         ctx.lineTo(spikes[ctr].x+(spikes[ctr].width/6), spikes[ctr].y-spikes[ctr].height);
@@ -218,9 +215,6 @@ function renderSpikes2() {
 
     }
 }
-
-// render enemy
-
 
 // render ground
 function renderGround2() {
@@ -386,15 +380,8 @@ function playerAlive2() {
     hazardCollided = false;
     index = 0;
 
-    // test for enemy collision
-
     // test for spike collision
     for (ctr=0; ctr<spikes.length; ctr++) {
-        /*if (spikes[ctr].x < player.x && player.x < spikes[ctr].x+spikes[ctr].width &&
-            spikes[ctr].y < player.y && player.y < spikes[ctr].y-spikes[ctr].height) {
-                hazardCollided = true;
-                break;
-            }*/
 
         if (((spikes[ctr].x < player.x && player.x-player.width < spikes[ctr].x) || 
             (spikes[ctr].x+spikes[ctr].width > player.x-player.width && player.x > spikes[ctr].x+spikes[ctr].width)) &&
@@ -442,7 +429,6 @@ function endScreen2() {
 // ok here we go with the actual game
 function start2() {
     init2();
-    //startButton.style.display = "none";
     playAgainButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
@@ -452,7 +438,6 @@ function start2() {
     createSpikes2();
     document.addEventListener("keydown",keyDown2);
     document.addEventListener("keyup",keyUp2);
-    // timePassed = 0;
 
     window.requestAnimationFrame(gameloop2);
 }
@@ -460,13 +445,11 @@ function start2() {
 function startAgain2() {
     playAgainButton.hidden = true;
     renderCanvas2();
-    //window.requestAnimationFrame(gameloop2);
 }
 
 function gameloop2(timeStamp) {
     // render everything
     renderCanvas2();
-    //renderLadder2();
     renderPlayer2();
     renderStarKey2();
     renderDoor2();
@@ -532,7 +515,6 @@ function gameOver2() {
 var letterControlsLevel = { // need start, render, gameloop2?, end
     type: jsPsychGame,
     start: start2,
-    //loop: function(){},
     gameWon: isGameWon,
     verName: "letterControls"
 }

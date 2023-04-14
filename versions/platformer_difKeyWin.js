@@ -38,7 +38,6 @@ var startTime = 0;
 window.addEventListener("load", init6);
 
 function init6() {
-    //startButton = document.getElementById("startButton");
     player = {
         x: 300,
         y: 200,
@@ -98,7 +97,6 @@ function init6() {
     isPlayerAlive = true;
     isOver = false;
     victoryCondition = false;
-    // timer = document.getElementById("timer");
     playAgainButton = document.getElementById("playAgain");
     successOneButton = document.getElementById("successOne");
 
@@ -189,7 +187,6 @@ function renderSpikes6() {
     for (ctr=0; ctr<spikes.length; ctr++) {
         if (!spikes[ctr].destroyed) {
         // attempting to render it a little differently; three small spikes, not one big one
-        //ctx.strokeSyle = "#000";
             ctx.beginPath(); // first spike
             ctx.moveTo(spikes[ctr].x, spikes[ctr].y); //starting point
             ctx.lineTo(spikes[ctr].x+(spikes[ctr].width/6), spikes[ctr].y-spikes[ctr].height);
@@ -223,9 +220,6 @@ function renderSpikes6() {
         }
     }
 }
-
-// render enemy
-
 
 // render ground
 function renderGround6() {
@@ -381,8 +375,6 @@ function openDoor6() {
 function playerAlive6() {
     hazardCollided = false;
 
-    // test for enemy collision
-
     // test for spike collision
     for (ctr=0; ctr<spikes.length; ctr++) {
         if (((spikes[ctr].x < player.x && player.x-player.width < spikes[ctr].x) || 
@@ -439,7 +431,6 @@ function endScreen6() {
 // ok here we go with the actual game
 function start6() {
     init6();
-    //startButton.style.display = "none";
     playAgainButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
@@ -449,7 +440,6 @@ function start6() {
     createSpikes6();
     document.addEventListener("keydown",keyDown);
     document.addEventListener("keyup",keyUp);
-    // timePassed = 0;
 
     window.requestAnimationFrame(gameLoop6);
 }
@@ -457,13 +447,11 @@ function start6() {
 function startAgain6() {
     playAgainButton.hidden = true;
     renderCanvas6();
-    //window.requestAnimationFrame(gameLoop6);
 }
 
 function gameLoop6(timeStamp) {
     // render everything
     renderCanvas6();
-    //renderLadder6();
     renderPlayer6();
     renderStarKey6();
     renderDoor6();
@@ -526,7 +514,6 @@ function gameOver6() {
 var difKeyLevel = { // need start, render, gameloop?, end
     type: jsPsychGame,
     start: start6,
-    //loop: function(){},
     gameWon: isGameWon,
     verName: "difKey"
 }

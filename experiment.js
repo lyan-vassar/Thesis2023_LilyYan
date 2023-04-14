@@ -1,5 +1,4 @@
 // Loads jsPsych
-//var jsPsych = initJsPsych({});
 var jsPsych = initJsPsych({
     on_finish: function() {
       jsPsych.data.displayData();
@@ -34,9 +33,8 @@ var versionNum = jsPsych.randomization.sampleWithoutReplacement([0, 1, 2, 3, 4, 
 //versionNum = 7;
 
 // for debug purposes, comment out when done 
-
-var currLevel = comboMotor2Sem2;
-var levelPrompt = comboMotor2Sem2Survey;
+/*var currLevel = comboMotor2Sem2;
+var levelPrompt = comboMotor2Sem2Survey;*/
 
 // comment back in for final version
 var currLevel = levels[versionNum];
@@ -46,7 +44,6 @@ var levelPrompt = levelSurveys[versionNum];
 // will add version number to data frame
 jsPsych.data.addProperties({
     version: versionNum
-    //deaths: numberOfDeaths
 });
 
 var welcome = {
@@ -83,15 +80,6 @@ var trialPt2 = {
     questions: currLevel.questions
 }
 
-/*attempt at normal version
-var trial = {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: function() {
-        var stim = "<div id='game'><script type='text/javascript' src='platformer_basic.js'></script><div id='intro'><button type='button' id='startButton' onclick='start()'>START</button></div><div id='end'><button type='button' id='playAgain' onclick='start()' hidden>TRY AGAIN</button></div><canvas id='canvas'></canvas></div>";
-        return stim;
-    }
-}*/
-
 //console.log(currLevel);
 timeline.push(currLevel);
 
@@ -104,22 +92,6 @@ var instructionsPt2 = {
 
 timeline.push(instructionsPt2);
 timeline.push(levelPrompt);
-
-// Saves data
-/* var save_server_data = {
-    type: jsPsychCallFunction,
-    func: function () {
-      var data = jsPsych.data.get().json();
-      var xhr = new XMLHttpRequest();
-      xhr.open('POST', 'php/save_json.php');
-      xhr.setRequestHeader('Content-Type', 'application/json');
-      xhr.send(JSON.stringify({ filedata: data }));
-      jsPsych.data.get().localSave('csv','mydata.csv');
-    },
-    post_trial_gap: 1000
-  }
-
-timeline.push(save_server_data); */
 
 var quickQuestion = {
   type: jsPsychSurveyText,
@@ -143,18 +115,6 @@ timeline.push(save_data);
 var debrief = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: "Thank you for participating in the experiment!\n If you'd like to learn more about the purpose of this experiment and what we're measuring, press 'y'.<p>Otherwise, <a href='https://app.prolific.co/submissions/complete?cc=COZ068ZS'>click here to return to Prolific and complete the study</a>.</p>"
-    //choices: [" "]//,
-    /*on_finish: function () {
-      document.querySelector("html").classList.remove("hide-cursor");
-    },*/
-
-    // save to a json?
-    /*on_start: function () {
-      jsPsych.data
-        .get()
-        .localSave("json", "sample.json");
-        //.localSave("json", `subject-${subject_id}-behavioral.json`);
-    },*/
   };
 
   var full_debrief = {

@@ -26,14 +26,11 @@ var playAgainSurveyButton;
 var successOneButton;
 var instructionsField;
 var numberOfDeaths = 0;
-// var timer;
-// var timePassed = 0;
 
 
 window.addEventListener("load", initSurvey4);
 
 function initSurvey4() {
-    //startButton = document.getElementById("startButton");
     player = {
         x: 200,
         y: 300,
@@ -93,7 +90,6 @@ function initSurvey4() {
     isPlayerAlive = true;
     isOver = false;
     victoryCondition = false;
-    // timer = document.getElementById("timer");
     playAgainSurveyButton = document.getElementById("playAgainSurvey");
     successOneButton = document.getElementById("successOne");
     hintButton = document.getElementById("hint");
@@ -180,7 +176,6 @@ function createSpikes4() {
 function renderSpikes4() {
     for (ctr=0; ctr<spikes.length; ctr++) {
         // attempting to render it a little differently; three small spikes, not one big one
-        //ctx.strokeSyle = "#000";
         ctx.beginPath(); // first spike
         ctx.moveTo(spikes[ctr].x, spikes[ctr].y); //starting point
         ctx.lineTo(spikes[ctr].x-(spikes[ctr].height), spikes[ctr].y+spikes[ctr].width/6);
@@ -213,9 +208,6 @@ function renderSpikes4() {
 
     }
 }
-
-// render enemy
-
 
 // render ground
 function renderGround4() {
@@ -360,12 +352,6 @@ function checkKeyCollection4() {
 
 // function to check if door is reached
 function openDoor4() {
-    // if (((door.unlocked && door.x < player.x && player.x-player.width < door.x) ||
-    //     (door.x+door.width > player.x-player.width && player.x > door.x+door.width)) &&
-    //     door.y <= player.y && player.y <= door.y+door.height) { // if player reaches door AND door is unlocked
-    //         victoryCondition = true; // you win!
-    //     }
-
     if (door.unlocked && ((door.y < player.y && player.y-player.height < door.y) ||
         (door.y+door.height > player.y-player.height && player.y > door.y+door.height)) &&
         door.x <= player.x && player.x <= door.x+door.width) { // if player reaches door AND door is unlocked
@@ -377,8 +363,6 @@ function openDoor4() {
 function playerAlive4() {
     hazardCollided = false;
     index = 0;
-
-    // test for enemy collision
 
     // test for spike collision
     for (ctr=0; ctr<spikes.length; ctr++) {
@@ -418,7 +402,6 @@ function endScreenSurvey4() {
 // ok here we go with the actual game
 function startSurvey4() {
     initSurvey4();
-    //startButton.style.display = "none";
     playAgainSurveyButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
@@ -428,7 +411,6 @@ function startSurvey4() {
     createSpikes4();
     document.addEventListener("keydown",keyDown4);
     document.addEventListener("keyup",keyUp4);
-    // timePassed = 0;
 
     window.requestAnimationFrame(gameLoopSurvey4);
 }
@@ -436,16 +418,12 @@ function startSurvey4() {
 function gameLoopSurvey4(timeStamp) {
     // render everything
     renderCanvas4();
-    //renderLadder4();
     renderPlayer4();
     renderStarKey4();
     renderDoor4();
     renderGround4();
     renderSpikes4();
     renderPlatforms4();
-    //checkLadderClimb4();
-    // timePassed += Math.round(timeStamp / 1000);
-    // timer.innerHTML = "Timer: " + timePassed;
 
     // if player is not jumping, apply friction. otherwise apply gravity
     if (player.jump == false) {
@@ -498,7 +476,6 @@ function isGameOver(){
 var gravityLevelSurvey = { // need start, render, gameloop?, end
     type: jsPsychGameSurvey,
     start: startSurvey4,
-    //loop: function(){},
     gameWon: isGameWon,
     verName: "gravity",
     questions: [

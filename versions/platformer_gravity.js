@@ -36,7 +36,6 @@ var startTime = 0;
 window.addEventListener("load", init4);
 
 function init4() {
-    //startButton = document.getElementById("startButton");
     player = {
         x: 200,
         y: 300,
@@ -93,7 +92,6 @@ function init4() {
     isPlayerAlive = true;
     isOver = false;
     victoryCondition = false;
-    // timer = document.getElementById("timer");
     playAgainButton = document.getElementById("playAgain");
     successOneButton = document.getElementById("successOne");
 
@@ -183,7 +181,6 @@ function createSpikes4() {
  function renderSpikes4() {
      for (ctr=0; ctr<spikes.length; ctr++) {
          // attempting to render it a little differently; three small spikes, not one big one
-         //ctx.strokeSyle = "#000";
          ctx.beginPath(); // first spike
          ctx.moveTo(spikes[ctr].x, spikes[ctr].y); //starting point
          ctx.lineTo(spikes[ctr].x-(spikes[ctr].height), spikes[ctr].y+spikes[ctr].width/6);
@@ -216,9 +213,6 @@ function createSpikes4() {
  
      }
  }
-
-// render enemy
-
 
 // render ground
 function renderGround4() {
@@ -368,8 +362,6 @@ function playerAlive4() {
     hazardCollided = false;
     index = 0;
 
-    // test for enemy collision
-
     // test for spike collision
     for (ctr=0; ctr<spikes.length; ctr++) {
         if (((spikes[ctr].y < player.y && player.y-player.height < spikes[ctr].y) || 
@@ -418,7 +410,6 @@ function endScreen4() {
 // ok here we go with the actual game
 function start4() {
     init4();
-    //startButton.style.display = "none";
     playAgainButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
@@ -428,7 +419,6 @@ function start4() {
     createSpikes4();
     document.addEventListener("keydown",keyDown4);
     document.addEventListener("keyup",keyUp4);
-    // timePassed = 0;
 
     window.requestAnimationFrame(gameLoop4);
 }
@@ -436,13 +426,11 @@ function start4() {
 function startAgain4() {
     playAgainButton.style.visibility = "hidden";
     renderCanvas4();
-    //window.requestAnimationFrame(gameLoop4);
 }
 
 function gameLoop4(timeStamp) {
     // render everything
     renderCanvas4();
-    //renderLadder4();
     renderPlayer4();
     renderStarKey4();
     renderDoor4();
@@ -511,7 +499,6 @@ function isGameOver(){
 var gravityLevel = { // need start, render, gameloop?, end
     type: jsPsychGame,
     start: start4,
-    //loop: function(){},
     gameWon: isGameWon,
     verName: "gravity"
 }

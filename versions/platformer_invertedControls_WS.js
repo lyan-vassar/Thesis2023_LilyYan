@@ -25,14 +25,11 @@ var playAgainSurveyButton;
 var successOneButton;
 var instructionsField;
 var numberOfDeaths = 0;
-// var timer;
-// var timePassed = 0;
 
 
 window.addEventListener("load", initSurvey1);
 
 function initSurvey1() {
-    //startButton = document.getElementById("startButton");
     player = {
         x: 300,
         y: 200,
@@ -92,7 +89,6 @@ function initSurvey1() {
     isPlayerAlive = true;
     isOver = false;
     victoryCondition = false;
-    // timer = document.getElementById("timer");
     playAgainSurveyButton = document.getElementById("playAgainSurvey");
     successOneButton = document.getElementById("successOne");
     hintButton = document.getElementById("hint");
@@ -179,7 +175,6 @@ function createSpikes1() {
 function renderSpikes1() {
     for (ctr=0; ctr<spikes.length; ctr++) {
         // attempting to render it a little differently; three small spikes, not one big one
-        //ctx.strokeSyle = "#000";
         ctx.beginPath(); // first spike
         ctx.moveTo(spikes[ctr].x, spikes[ctr].y); //starting point
         ctx.lineTo(spikes[ctr].x+(spikes[ctr].width/6), spikes[ctr].y-spikes[ctr].height);
@@ -212,9 +207,6 @@ function renderSpikes1() {
 
     }
 }
-
-// render enemy
-
 
 // render ground
 function renderGround1() {
@@ -380,15 +372,8 @@ function playerAlive1() {
     hazardCollided = false;
     index = 0;
 
-    // test for enemy collision
-
     // test for spike collision
     for (ctr=0; ctr<spikes.length; ctr++) {
-        /*if (spikes[ctr].x < player.x && player.x < spikes[ctr].x+spikes[ctr].width &&
-            spikes[ctr].y < player.y && player.y < spikes[ctr].y-spikes[ctr].height) {
-                hazardCollided = true;
-                break;
-            }*/
 
         if (((spikes[ctr].x < player.x && player.x-player.width < spikes[ctr].x) || 
             (spikes[ctr].x+spikes[ctr].width > player.x-player.width && player.x > spikes[ctr].x+spikes[ctr].width)) &&
@@ -426,7 +411,6 @@ function endScreenSurvey1() {
 // ok here we go with the actual game
 function startSurvey1() {
     initSurvey1();
-    //startButton.style.display = "none";
     playAgainSurveyButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
@@ -436,7 +420,6 @@ function startSurvey1() {
     createSpikes1();
     document.addEventListener("keydown",keyDown1);
     document.addEventListener("keyup",keyUp1);
-    // timePassed = 0;
 
     window.requestAnimationFrame(gameLoopSurvey1);
 }
@@ -444,16 +427,12 @@ function startSurvey1() {
 function gameLoopSurvey1(timeStamp) {
     // render everything
     renderCanvas1();
-    //renderLadder1();
     renderPlayer1();
     renderStarKey1();
     renderDoor1();
     renderGround1();
     renderSpikes1();
     renderPlatforms1();
-    //checkLadderClimb1();
-    // timePassed += Math.round(timeStamp / 1000);
-    // timer.innerHTML = "Timer: " + timePassed;
 
     // if player is not jumping, apply friction. otherwise apply gravity
     if (player.jump == false) {
@@ -502,7 +481,6 @@ function gameOverSurvey1() {
 var invertedControlsLevelSurvey = { // need start, render, gameloop?, end
     type: jsPsychGameSurvey,
     start: startSurvey1,
-    //loop: function(){},
     gameWon: isGameWon,
     verName: "invertedControls",
     questions: [

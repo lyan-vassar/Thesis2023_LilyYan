@@ -1,10 +1,6 @@
 /* NUMBER 7: COMBO of motor2+sem2 (letter controls and incorrect gravity)
     combination of letter control keys and incorrect gravity (motor2sem2)
-
-        TO DEBUG: 
-        * there might be something wrong w the up button?
-
-    */
+*/
 
 // variables
 var player;
@@ -28,8 +24,6 @@ var playAgainButton;
 var successOneButton;
 var instructionsField;
 var numberOfDeaths = 0;
-// var timer;
-// var timePassed = 0;
 var initialTimeCollected = false;
 var startTime = 0;
 
@@ -97,7 +91,6 @@ function init7() {
     isPlayerAlive = true;
     isOver = false;
     victoryCondition = false;
-    // timer = document.getElementById("timer");
     playAgainButton = document.getElementById("playAgain");
     successOneButton = document.getElementById("successOne");
 
@@ -187,8 +180,6 @@ function createSpikes7() {
 function renderSpikes7() {
     // render spikes
     for (ctr=0; ctr<spikes.length; ctr++) {
-        // attempting to render it a little differently; three small spikes, not one big one
-        //ctx.strokeSyle = "#000";
         ctx.beginPath(); // first spike
         ctx.moveTo(spikes[ctr].x, spikes[ctr].y); //starting point
         ctx.lineTo(spikes[ctr].x-(spikes[ctr].height), spikes[ctr].y+spikes[ctr].width/6);
@@ -222,9 +213,6 @@ function renderSpikes7() {
     }
 }
 
-// render enemy
-
-
 // render ground
 function renderGround7() {
     ctx.fillStyle = "black";
@@ -248,7 +236,6 @@ function createPlatforms7() {
 
 // render platforms
 function renderPlatforms7() {
-    //ctx.fillStyle = "#45597E";
     for (ctr=0; ctr<numPlatforms; ctr++) {
         ctx.fillStyle = platforms[ctr].color;
         ctx.fillRect(platforms[ctr].x, platforms[ctr].y, platforms[ctr].width, platforms[ctr].height);
@@ -389,8 +376,6 @@ function playerAlive7() {
     hazardCollided = false;
     index = 0;
 
-    // test for enemy collision
-
     // test for spike collision
     for (ctr=0; ctr<spikes.length; ctr++) {
         if (((spikes[ctr].y < player.y && player.y-player.height < spikes[ctr].y) || 
@@ -455,7 +440,6 @@ function endScreen7() {
 // ok here we go with the actual game
 function start7() {
     init7();
-    //startButton.style.display = "none";
     playAgainButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
@@ -465,30 +449,19 @@ function start7() {
     createSpikes7();
     document.addEventListener("keydown",keyDown7);
     document.addEventListener("keyup",keyUp7);
-    // timePassed = 0;
 
     window.requestAnimationFrame(gameLoop7);
 }
 
-/*function startAgain() {
-    playAgainButton.style.visibility = "hidden";
-    renderCanvas();
-    //window.requestAnimationFrame(gameLoop7);
-}*/
-
 function gameLoop7(timeStamp) {
     // render everything
     renderCanvas7();
-    //renderLadder7();
     renderPlayer7();
     renderStarKey7();
     renderDoor7();
     renderGround7();
     renderSpikes7();
     renderPlatforms7();
-    //checkLadderClimb7();
-    // timePassed += Math.round(timeStamp / 1000);
-    // timer.innerHTML = "Timer: " + timePassed;
     if (!initialTimeCollected) {
         initialTimeCollected = true;
         startTime = timeStamp;
@@ -525,7 +498,6 @@ function gameLoop7(timeStamp) {
     playerAlive7();
 
     // if win condition is met, end game
-    //isWin();
     openDoor7();
 
     if ((timeStamp - startTime) >= 240000 && !hintUsed) {
@@ -548,7 +520,6 @@ function gameOver7() {
 var comboMotor2Sem2 = { // need start, render, gameloop?, end
     type: jsPsychGame,
     start: start7,
-    //loop: function(){},
     gameWon: isGameWon,
     verName: "comboM2S2",
     questions: [

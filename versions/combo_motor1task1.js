@@ -25,8 +25,6 @@ var playAgainButton;
 var successOneButton;
 var instructionsField;
 var numberOfDeaths = 0;
-//var timer;
-//var timePassed = 0;
 var initialTimeCollected = false;
 var startTime = 0;
 
@@ -34,7 +32,6 @@ var startTime = 0;
 window.addEventListener("load", init9);
 
 function init9() {
-    //startButton = document.getElementById("startButton");
     player = {
         x: 300,
         y: 200,
@@ -95,7 +92,6 @@ function init9() {
     isPlayerAlive = true;
     isOver = false;
     victoryCondition = false;
-    // timer = document.getElementById("timer");
     playAgainButton = document.getElementById("playAgain");
     successOneButton = document.getElementById("successOne");
     hintButton = document.getElementById("hint");
@@ -106,7 +102,6 @@ function init9() {
 
 // render canvas
 function renderCanvas9() {
-    //ctx.fillStyle = "#F0F8FF";
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, 550, 300);
 }
@@ -185,7 +180,6 @@ function createSpikes9() {
 function renderSpikes9() {
     for (ctr=0; ctr<spikes.length; ctr++) {
         // attempting to render it a little differently; three small spikes, not one big one
-        //ctx.strokeSyle = "#000";
         ctx.beginPath(); // first spike
         ctx.moveTo(spikes[ctr].x, spikes[ctr].y); //starting point
         ctx.lineTo(spikes[ctr].x+(spikes[ctr].width/6), spikes[ctr].y-spikes[ctr].height);
@@ -218,9 +212,6 @@ function renderSpikes9() {
 
     }
 }
-
-// render enemy
-
 
 // render ground
 function renderGround9() {
@@ -325,18 +316,13 @@ function checkCollisions9() {
             platforms[ctr].y < player.y && player.y < platforms[ctr].y + platforms[ctr].height){
                 ans = true;
                 index = ctr;
-                //if (!currentSequence.includes(ctr)) currentSequence.push(ctr);
                 if (currentSequence.length == 0) currentSequence.push(index);
                 else if (currentSequence.length > 0 && currentSequence[currentSequence.length-1] != index) 
                     currentSequence.push(index);
 
-                    //console.log(noDuplicates(currentSequence), ctr, currentSequence);
-
-                //console.log(currentSequence);
                 // for changing color of platforms; green = correct, red = incorrect
                 if (currentSequence.length <= winSequence.length && currentSequence[index] == winSequence[index] 
                     && groundCollided && noDuplicates(currentSequence)) {
-                        //console.log(noDuplicates(currentSequence), ctr);
                         platforms[index].color = "limegreen";
                 }
                 else if (currentSequence.length <= winSequence.length && 
@@ -388,7 +374,6 @@ function checkKeyCollection9() {
     if (starkey.x < player.x && player.x < starkey.x+(starkey.outerRadius*2) &&
         starkey.y < player.y && player.y < starkey.y+(starkey.outerRadius*2)) {
             starkey.collected = true;
-            //door.unlocked = true;
         }
 }
 
@@ -396,25 +381,17 @@ function checkKeyCollection9() {
 
 // function to check if door is reached
 function openDoor9() {
-    /*if (door.x < player.x && player.x < door.x + door.width &&
-        door.y < player.y && player.y < door.y + door.height &&
-        door.unlocked) {
-            victoryCondition = true;
-        }*/
-
-        if (door.unlocked && ((door.x < player.x && player.x-player.width < door.x) ||
+    if (door.unlocked && ((door.x < player.x && player.x-player.width < door.x) ||
         (door.x+door.width > player.x-player.width && player.x > door.x+door.width)) &&
         door.y <= player.y && player.y <= door.y+door.height) { // if player reaches door AND door is unlocked
             victoryCondition = true; // you win!
-        }
+    }
 }
 
 // function to check if player died
 function playerAlive9() {
     hazardCollided = false;
     index = 0;
-
-    // test for enemy collision
 
     // test for spike collision
     for (ctr=0; ctr<spikes.length; ctr++) {
@@ -472,7 +449,6 @@ function endScreen9() {
 // ok here we go with the actual game
 function start9() {
     init9();
-    //startButton.style.display = "none";
     playAgainButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
@@ -482,17 +458,9 @@ function start9() {
     createSpikes9();
     document.addEventListener("keydown",keyDown9);
     document.addEventListener("keyup",keyUp9);
-    // timePassed = 0;
 
     window.requestAnimationFrame(gameLoop9);
 }
-
-/*
-function startAgain9() {
-    playAgainButton.style.visibility = "hidden";
-    renderCanvas9();
-    //window.requestAnimationFrame(gameLoop);
-}*/
 
 function gameLoop9(timeStamp) {
     // render everything
@@ -504,9 +472,6 @@ function gameLoop9(timeStamp) {
     renderGround9();
     renderSpikes9();
     renderPlatforms9();
-    //checkLadderClimb9();
-    // timePassed += Math.round(timeStamp / 1000);
-    // timer.innerHTML = "Timer: " + timePassed;
     if (!initialTimeCollected) {
         initialTimeCollected = true;
         startTime = timeStamp;
@@ -567,7 +532,6 @@ function gameOver9() {
 var comboMotor1Task1 = { // need start, render, gameloop?, end
     type: jsPsychGame,
     start: start9,
-    //loop: function(){},
     gameWon: isGameWon,
     verName: "comboM1T1"
 }

@@ -1,17 +1,4 @@
-/* NUMBER 0: BASIC VER
-
-KNOWN ISSUES LIST
-    * ladder glitches sometimes (will make player automatically go up) (sometimes it fixes itself? it's weird)
-    * collision functions are iffy --> MUST EDIT SOON
-    * spike placement on gravity levels should be better
-    
-
-    Things I'd like to clean up
-    * make stars look better (have to figure out what's wrong with my render fxn)
-    * make UI nicer
-    * maybe replace some elements with actual images instead of just shapes
-        * would i have to draw those myself??
-    * slow timer down
+/* NUMBER 0: basic version
 */
 
 // variables
@@ -38,15 +25,12 @@ var hintGif;
 var hintUsed = false;
 var instructionsField;
 var numberOfDeaths = 0;
-// var timer;
-// var timePassed = 0;
 
 
 window.addEventListener("load", initSurvey0);
 
 
 function initSurvey0() {
-    //startButton = document.getElementById("startButton");
     player = {
         x: 300,
         y: 200,
@@ -105,13 +89,9 @@ function initSurvey0() {
     gravity = 0.6;
     isPlayerAlive = true;
     victoryCondition = false;
-    // timer = document.getElementById("timer");
     playAgainSurveyButton = document.getElementById("playAgainSurvey");
     successOneButton = document.getElementById("successOne");
     hintButton = document.getElementById("hint");
-
-    //hintGif = document.getElementById("hintAnimation");
-    //hintGif.src = "basic_hint.gif";
 
 }
 
@@ -136,8 +116,6 @@ function renderLadder0() {
 // render starkey
 function renderStarKey0() {
     if (!starkey.collected) { // only render if starkey wasn't collected yet
-        // this is a 5 point star-rendering function I found from online tutorials
-        // it's not perfect; i will try to figure out why
         var rot = Math.PI / 2 * 3;
         var pointX = starkey.x;
         var pointY = starkey.y;
@@ -197,7 +175,6 @@ function createSpikes0() {
 function renderSpikes0() {
     for (ctr=0; ctr<spikes.length; ctr++) {
         // attempting to render it a little differently; three small spikes, not one big one
-        //ctx.strokeSyle = "#000";
         ctx.beginPath(); // first spike
         ctx.moveTo(spikes[ctr].x, spikes[ctr].y); //starting point
         ctx.lineTo(spikes[ctr].x+(spikes[ctr].width/6), spikes[ctr].y-spikes[ctr].height);
@@ -230,9 +207,6 @@ function renderSpikes0() {
 
     }
 }
-
-// render enemy (maybe?)
-
 
 // render ground
 function renderGround0() {
@@ -272,8 +246,8 @@ function keyDown(e) {
 
     // up arrow key = 38
     if (e.keyCode == 38) {
-        if (!player.jump) { // if player's not already in the air 
-            player.y_v = -10; // go up
+        if (!player.jump) { 
+            player.y_v = -10; 
         }
 
         if (player.climb) {
@@ -334,19 +308,12 @@ function checkCollisions0() {
     for (ctr=0; ctr<numPlatforms; ctr++) {
         if (platforms[ctr].x < player.x && player.x-player.width <= platforms[ctr].x + platforms[ctr].width &&
             platforms[ctr].y < player.y && player.y < platforms[ctr].y + platforms[ctr].height){
-                //ans = true;
-                //index = ctr;
                 player.jump = false;
                 player.y = platforms[ctr].y;
                 ans = true;
                 break;
         }
     }
-
-    /*if (ans) { // if player did hit a platform
-        player.jump = false; // player is no longer jumping
-        player.y = platforms[index].y; // keep player at same y level as platform
-    }*/
 
     if (!ans && ground.y < player.y && player.y < ground.y+ground.height) { // if player's on the ground
         player.jump = false;
@@ -358,8 +325,7 @@ function checkCollisions0() {
     if (player.x >= ground.width) player.x = ground.width;
 }
 
-// function for climbing the ladder
-// not flawless
+// unused
 function checkLadderClimb0() {
     if (ladder.x < player.x && player.x < ladder.x + ladder.width &&
         ladder.y < player.y && player.y < ladder.y + ladder.height) {
@@ -395,8 +361,6 @@ function playerAlive0() {
     hazardCollided = false;
     index = 0;
 
-    // test for enemy collision
-
     // test for spike collision
     for (ctr=0; ctr<spikes.length; ctr++) {
         // sorry this next line looks like a mess, it was the best way i could make it work
@@ -412,22 +376,6 @@ function playerAlive0() {
     isPlayerAlive = !hazardCollided;
 
 }
-
-// function to check win condition
-// this is really only relevant for the platform sequence level
-/*
-function isWin() {
-    ans = true;
-    if (currentSequence.length == winSequence.length) { 
-        for (ctr=0; ctr<currentSequence.length; ctr++) {
-            if (currentSequence[ctr] != winSequence[ctr]) {
-                ans = false;
-                break;
-            }
-        }
-        victoryCondition = ans;
-    }
-}*/
 
 // function to display end screen with play again fxn
 function endScreenLoop0() {
@@ -450,11 +398,9 @@ function endScreenLoop0() {
 
 
 
-// ok here we go with the actual game
+// actual game
 function startSurvey0() {
-    //console.log(door.unlocked);
     initSurvey0();
-    //startButton.style.display = "none";
     playAgainSurveyButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
@@ -464,31 +410,20 @@ function startSurvey0() {
     createSpikes0();
     document.addEventListener("keydown",keyDown);
     document.addEventListener("keyup",keyUp);
-    // timePassed = 0;
 
     window.requestAnimationFrame(gameLoopSurvey0);
 }
 
-/*function startAgain() {
-    playAgainSurveyButton.style.visibility = "hidden";
-    renderCanvas();
-    //window.requestAnimationFrame(gameLoop);
-}*/
 
 function gameLoopSurvey0(timeStamp) {
-    //console.log(victoryCondition);
     // render everything
     renderCanvas0();
-    //renderLadder0();
     renderPlayer0();
     renderStarKey0();
     renderDoor0();
     renderGround0();
     renderSpikes0();
     renderPlatforms0();
-    //checkLadderClimb0();
-    // timePassed += Math.round(timeStamp / 1000);
-    // timer.innerHTML = "Timer: " + timePassed;
 
     // if player is not jumping, apply friction; otherwise apply gravity
     if (player.jump == false) {
@@ -515,28 +450,13 @@ function gameLoopSurvey0(timeStamp) {
     if (player.y_v >= 10) player.y_v = 10;
     player.y += player.y_v;
 
-
-    // // update player's coordinates
-    // player.x += player.x_v;
-    // if (player.y + player.y_v >= platforms[closestPlatform()].y && !player.jump) player.y = platforms[closestPlatform()].y;
-    // else player.y += player.y_v;
-
-    
-    //player.y += player.y_v;
-
-    //player.climb = false;
-
     // check for collisions with platform
     checkCollisions0();
     checkKeyCollection0();
     playerAlive0();
 
     // if win condition is met, end game
-    //isWin0();
     openDoor0();
-
-    //basicLevel.gameWon = isGameWon;
-    //console.log("basic level: " + basicLevel.gameWon());
 
     // game ends if you win, or if you die
     if (victoryCondition || !isPlayerAlive) {
@@ -548,20 +468,15 @@ function gameLoopSurvey0(timeStamp) {
 
 function gameOverSurvey0() { // if game is over
     cancelAnimationFrame(gameLoopSurvey0);
-
-    // add something to be able to toggle btwn these two
-    //endScreen0();
     endScreenLoop0(); 
-
     initSurvey0();
 }
 
 function isGameWon(){
-    //return (victoryCondition || !isPlayerAlive);
     return victoryCondition;
 }
 
-var basicLevelSurvey = { // need start, render, gameloop?, end
+var basicLevelSurvey = { 
     type: jsPsychGameSurvey,
     start: startSurvey0,
     gameWon: isGameWon,

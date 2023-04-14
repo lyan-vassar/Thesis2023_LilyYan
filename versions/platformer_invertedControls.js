@@ -35,7 +35,6 @@ var startTime = 0;
 window.addEventListener("load", init1);
 
 function init1() {
-    //startButton = document.getElementById("startButton");
     player = {
         x: 300,
         y: 200,
@@ -95,7 +94,6 @@ function init1() {
     isPlayerAlive = true;
     isOver = false;
     victoryCondition = false;
-    // timer = document.getElementById("timer");
     playAgainButton = document.getElementById("playAgain");
     successOneButton = document.getElementById("successOne");
 
@@ -185,7 +183,6 @@ function createSpikes1() {
 function renderSpikes1() {
     for (ctr=0; ctr<spikes.length; ctr++) {
         // attempting to render it a little differently; three small spikes, not one big one
-        //ctx.strokeSyle = "#000";
         ctx.beginPath(); // first spike
         ctx.moveTo(spikes[ctr].x, spikes[ctr].y); //starting point
         ctx.lineTo(spikes[ctr].x+(spikes[ctr].width/6), spikes[ctr].y-spikes[ctr].height);
@@ -386,15 +383,8 @@ function playerAlive1() {
     hazardCollided = false;
     index = 0;
 
-    // test for enemy collision
-
     // test for spike collision
     for (ctr=0; ctr<spikes.length; ctr++) {
-        /*if (spikes[ctr].x < player.x && player.x < spikes[ctr].x+spikes[ctr].width &&
-            spikes[ctr].y < player.y && player.y < spikes[ctr].y-spikes[ctr].height) {
-                hazardCollided = true;
-                break;
-            }*/
 
         if (((spikes[ctr].x < player.x && player.x-player.width < spikes[ctr].x) || 
             (spikes[ctr].x+spikes[ctr].width > player.x-player.width && player.x > spikes[ctr].x+spikes[ctr].width)) &&
@@ -442,7 +432,6 @@ function endScreen1() {
 // ok here we go with the actual game
 function start1() {
     init1();
-    //startButton.style.display = "none";
     playAgainButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
@@ -460,7 +449,6 @@ function start1() {
 function gameloop1(timeStamp) {
     // render everything
     renderCanvas1();
-    //renderLadder1();
     renderPlayer1();
     renderStarKey1();
     renderDoor1();
@@ -525,7 +513,6 @@ function gameOver1() {
 var invertedControlsLevel = { // need start, render, gameloop?, end
     type: jsPsychGame,
     start: start1,
-    //loop: function(){},
     gameWon: isGameWon,
     verName: "invertedControls"
 }

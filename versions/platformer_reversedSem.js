@@ -1,13 +1,9 @@
 /* NUMBER 3: REVERSED SEMANTICS
-
-TO DO LIST:
-    * reversed semantics
     * the spikes will be stars
     * the star will be foe (just gotta get THIS png to work)
     * the door will be spike
-    * would love for the ladder to look like a row of fires or something, but that's only if i can get the png to work
-*/
-
+    * */
+   
 // variables
 var player;
 var ground;
@@ -41,7 +37,6 @@ var startTime = 0;
 window.addEventListener("load", init3);
 
 function init3() {
-    //startButton = document.getElementById("startButton");
     player = {
         x: 300,
         y: 200,
@@ -121,7 +116,6 @@ function init3() {
     isPlayerAlive = true;
     isOver = false;
     victoryCondition = false;
-    // timer = document.getElementById("timer");
     playAgainButton = document.getElementById("playAgain");
     successOneButton = document.getElementById("successOne");
 
@@ -157,8 +151,6 @@ function renderStarKey3() {
 
 // render door
 function renderDoor3() {
-    /*ctx.fillStyle = "green";
-    ctx.fillRect(door.x, door.y, door.width, door.height);*/
     ctx.beginPath(); // first spike
         ctx.moveTo(door.x, door.y); //starting point
         ctx.lineTo(door.x+(door.width/6), door.y-door.height);
@@ -238,9 +230,6 @@ function renderSpikes3() {
         ctx.fill();
     }
 }
-
-// render enemy
-
 
 // render ground
 function renderGround3() {
@@ -377,12 +366,6 @@ function checkLadderClimb3() {
 
 // function for collecting the starkey
 function checkKeyCollection3() {
-    /*if (starkey.x < player.x && player.x < starkey.x+starkey.width &&
-        starkey.y < player.y && player.y < starkey.y+starkey.height) {
-            starkey.collected = true;
-            door.unlocked = true;
-        }*/
-
     if (((starkey.x < player.x && player.x-player.width < starkey.x) || 
         (starkey.x+starkey.width > player.x-player.width && player.x > starkey.x+starkey.width)) &&
         starkey.y <= player.y && player.y-player.height <= starkey.y+starkey.height) {
@@ -405,18 +388,8 @@ function playerAlive3() {
     hazardCollided = false;
     index = 0;
 
-    // test for enemy collision
-
     // test for spike collision
     for (ctr=0; ctr<spikes.length; ctr++) {
-        /*
-        if (((spikes[ctr].x < player.x && player.x-player.width < spikes[ctr].x) || 
-            (spikes[ctr].x+spikes[ctr].width > player.x-player.width && player.x > spikes[ctr].x+spikes[ctr].width)) &&
-            spikes[ctr].y-spikes[ctr].height < player.y && player.y <= spikes[ctr].y) {
-                hazardCollided = true;
-                index = ctr;
-                break;
-            }*/
         
         if (spikes[ctr].x < player.x && player.x < spikes[ctr].x+(spikes[ctr].outerRadius*2) &&
             spikes[ctr].y < player.y && player.y < spikes[ctr].y+(spikes[ctr].outerRadius*2)) {
@@ -463,7 +436,6 @@ function endScreen3() {
 // ok here we go with the actual game
 function start3() {
     init3();
-    //startButton.style.display = "none";
     playAgainButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
@@ -473,7 +445,6 @@ function start3() {
     createSpikes3();
     document.addEventListener("keydown",keyDown3);
     document.addEventListener("keyup",keyUp3);
-    // timePassed = 0;
 
     window.requestAnimationFrame(gameLoop3);
 }
@@ -481,14 +452,11 @@ function start3() {
 function startAgain3() {
     playAgainButton.hidden = true;
     renderCanvas3();
-    //window.requestAnimationFrame(gameLoop3);
-    // timePassed = 0;
 }
 
 function gameLoop3(timeStamp) {
     // render everything
     renderCanvas3();
-    //renderLadder3();
     renderPlayer3();
     renderDoor3();
     renderGround3();
@@ -554,7 +522,6 @@ function gameOver3() {
 var reversedSemLevel = { // need start, render, gameloop?, end
     type: jsPsychGame,
     start: start3,
-    //loop: function(){},
     gameWon: isGameWon,
     verName: "reversedSem"
 }

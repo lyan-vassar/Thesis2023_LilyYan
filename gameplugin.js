@@ -1,19 +1,3 @@
-/* TO DO:
-
-    * make it work lol (v)
-    * implement try again button (v)
-    * collect and display data 
-    * make it work for all 10 versions --> next step
-
-    * create second plugin that puts up the html plugin side by side
-    * combine the two???? 
-
-    for later (aka prolific stuff)
-    * check if need to use cog sci research server?
-    * check what is needed to launch on prolific
-
-*/
-
 var jsPsychGame = (function (jspsych) {
     "use strict";
 
@@ -38,7 +22,7 @@ var jsPsychGame = (function (jspsych) {
     /**
      * **Game Plugin**
      *
-     * (for my thesis)
+     * (for thesis)
      *
      * @author Lily Yan
      * @see {@link https://DOCUMENTATION_URL DOCUMENTATION LINK TEXT}
@@ -79,40 +63,7 @@ var jsPsychGame = (function (jspsych) {
                 document.getElementById('hint').style.display = "none";
             });
 
-            // this.jsPsych.pluginAPI.setTimeout(()=>{
-            //     hint.hidden = false;
-            //   }, 600000);
-
-            //stick this inside a requestAnimationFrame loop
-            /*window.requestAnimationFrame(() => {
-                this.checkDone(trial);
-            });*/
-
         }
-
-        /*checkDone(trial) {
-            //stick this inside a requestAnimationFrame loop
-            if (trial.gameWon()) {
-                // data saving
-                var trial_data = {
-                    //parameter_name: "parameter value",
-                    success: trial.victoryCondition,
-                    timePassed: trial.timePassed
-                };
-                // end trial
-                this.jsPsych.finishTrial(trial_data);
-                
-                //FOR DEVELOPMENT TESTING PURPOSES ONLY
-                //this.jsPsych.data.get().localSave('csv','mydata.csv');
-                this.jsPsych.data.displayData();
-                console.log("hi");
-            } else {
-                window.requestAnimationFrame(() => {
-                    this.checkDone(trial);
-                });
-            }
-            
-        }*/
 
         
     }

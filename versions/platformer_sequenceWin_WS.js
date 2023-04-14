@@ -1,17 +1,5 @@
 /* NUMBER 5: PLATFORM SEQUENCE WIN
-
-    win by jumping on platforms
-
-    * so the win sequence works, but for some reason 
-        it takes so long for the doorunlocked thing to register. 
-        i didn't have this issue w the old howtounlock.js file before
-        so maybe i'm missing a code difference somewhere?
-
-    * would also like to figure out how to make the platforms
-        change color every time you jump on them, that'd be greattttt
-    * ^ changed this to having the platform turn green if correct
-        and red if not
-        * as long as there's SOME visual indication i think it's okay?
+* win by jumping on platforms in a certain order
 */
 
 // variables
@@ -37,14 +25,11 @@ var playAgainSurveyButton;
 var successOneButton;
 var instructionsField;
 var numberOfDeaths = 0;
-// var timer;
-// var timePassed = 0;
 
 
 window.addEventListener("load", initSurvey5);
 
 function initSurvey5() {
-    //startButton = document.getElementById("startButton");
     player = {
         x: 300,
         y: 200,
@@ -105,7 +90,6 @@ function initSurvey5() {
     isPlayerAlive = true;
     isOver = false;
     victoryCondition = false;
-    // timer = document.getElementById("timer");
     playAgainSurveyButton = document.getElementById("playAgainSurvey");
     successOneButton = document.getElementById("successOne");
     hintButton = document.getElementById("hint");
@@ -212,7 +196,6 @@ function createSpikes5() {
 function renderSpikes5() {
     for (ctr=0; ctr<spikes.length; ctr++) {
         // attempting to render it a little differently; three small spikes, not one big one
-        //ctx.strokeSyle = "#000";
         ctx.beginPath(); // first spike
         ctx.moveTo(spikes[ctr].x, spikes[ctr].y); //starting point
         ctx.lineTo(spikes[ctr].x+(spikes[ctr].width/6), spikes[ctr].y-spikes[ctr].height);
@@ -245,9 +228,6 @@ function renderSpikes5() {
 
     }
 }
-
-// render enemy
-
 
 // render ground
 function renderGround5() {
@@ -351,18 +331,13 @@ function checkCollisions5() {
             platforms[ctr].y < player.y && player.y < platforms[ctr].y + platforms[ctr].height){
                 ans = true;
                 index = ctr;
-                //if (!currentSequence.includes(ctr)) currentSequence.push(ctr);
                 if (currentSequence.length == 0) currentSequence.push(index);
                 else if (currentSequence.length > 0 && currentSequence[currentSequence.length-1] != index) 
                     currentSequence.push(index);
 
-                    //console.log(noDuplicates(currentSequence), ctr, currentSequence);
-
-                //console.log(currentSequence);
                 // for changing color of platforms; green = correct, red = incorrect
                 if (currentSequence.length <= winSequence.length && currentSequence[index] == winSequence[index] 
                     && groundCollided && noDuplicates(currentSequence)) {
-                        //console.log(noDuplicates(currentSequence), ctr);
                         platforms[index].color = "limegreen";
                 }
                 else if (currentSequence.length <= winSequence.length && 
@@ -414,7 +389,6 @@ function checkKeyCollection5() {
     if (starkey.x < player.x && player.x < starkey.x+(starkey.outerRadius*2) &&
         starkey.y < player.y && player.y < starkey.y+(starkey.outerRadius*2)) {
             starkey.collected = true;
-            //door.unlocked = true;
         }
 }
 
@@ -422,12 +396,6 @@ function checkKeyCollection5() {
 
 // function to check if door is reached
 function openDoor5() {
-    /*if (door.x < player.x && player.x < door.x + door.width &&
-        door.y < player.y && player.y < door.y + door.height &&
-        door.unlocked) {
-            victoryCondition = true;
-        }*/
-
         if (door.unlocked && ((door.x < player.x && player.x-player.width < door.x) ||
         (door.x+door.width > player.x-player.width && player.x > door.x+door.width)) &&
         door.y <= player.y && player.y <= door.y+door.height) { // if player reaches door AND door is unlocked
@@ -440,15 +408,8 @@ function playerAlive5() {
     hazardCollided = false;
     index = 0;
 
-    // test for enemy collision
-
     // test for spike collision
     for (ctr=0; ctr<spikes.length; ctr++) {
-        /*if (spikes[ctr].x < player.x && player.x < spikes[ctr].x+spikes[ctr].width &&
-            spikes[ctr].y < player.y && player.y < spikes[ctr].y-spikes[ctr].height) {
-                hazardCollided = true;
-                break;
-            }*/
 
         if (((spikes[ctr].x < player.x && player.x-player.width < spikes[ctr].x) || 
             (spikes[ctr].x+spikes[ctr].width > player.x-player.width && player.x > spikes[ctr].x+spikes[ctr].width)) &&
@@ -491,7 +452,6 @@ function endScreenSurvey5() {
 // ok here we go with the actual game
 function startSurvey5() {
     initSurvey5();
-    //startButton.style.display = "none";
     playAgainSurveyButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
@@ -501,7 +461,6 @@ function startSurvey5() {
     createSpikes5();
     document.addEventListener("keydown",keyDown);
     document.addEventListener("keyup",keyUp);
-    // timePassed = 0;
 
     window.requestAnimationFrame(gameLoopSurvey5);
 }
@@ -509,16 +468,12 @@ function startSurvey5() {
 function gameLoopSurvey5(timeStamp) {
     // render everything
     renderCanvas5();
-    //renderLadder5();
     renderPlayer5();
     renderStarKey5();
     renderDoor5();
     renderGround5();
     renderSpikes5();
     renderPlatforms5();
-    //checkLadderClimb5();
-    // timePassed += Math.round(timeStamp / 1000);
-    // timer.innerHTML = "Timer: " + timePassed;
 
     // if player is not jumping, apply friction. otherwise apply gravity
     if (player.jump == false) {
@@ -566,14 +521,12 @@ function gameOverSurvey5() {
 }
 
 function isGameWon(){
-    //return (victoryCondition || !isPlayerAlive);
     return victoryCondition;
 }
 
 var sequenceWinLevelSurvey = { // need start, render, gameloop?, end
     type: jsPsychGameSurvey,
     start: startSurvey5,
-    //loop: function(){},
     gameWon: isGameWon,
     verName: "sequenceWin",
     questions: [

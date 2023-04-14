@@ -105,9 +105,6 @@ var jsPsychGameSurvey = (function (jspsych) {
         </div>
         `
 
-            //display_element.querySelector("#startButton").addEventListener('click', trial.start);
-            //display_element.querySelector("#playAgain").addEventListener('click', trial.start);
-
             //stick this inside a requestAnimationFrame loop
             window.requestAnimationFrame(() => {
                 this.checkDone(trial);

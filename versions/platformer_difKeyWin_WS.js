@@ -35,7 +35,6 @@ var numberOfDeaths = 0;
 window.addEventListener("load", initSurvey6);
 
 function initSurvey6() {
-    //startButton = document.getElementById("startButton");
     player = {
         x: 300,
         y: 200,
@@ -95,7 +94,6 @@ function initSurvey6() {
     isPlayerAlive = true;
     isOver = false;
     victoryCondition = false;
-    // timer = document.getElementById("timer");
     playAgainSurveyButton = document.getElementById("playAgainSurvey");
     successOneButton = document.getElementById("successOne");
     hintButton = document.getElementById("hint");
@@ -179,12 +177,10 @@ function createSpikes6() {
 }
 
 // render spikes
-// render spikes
 function renderSpikes6() {
     for (ctr=0; ctr<spikes.length; ctr++) {
         if (!spikes[ctr].destroyed) {
         // attempting to render it a little differently; three small spikes, not one big one
-        //ctx.strokeSyle = "#000";
             ctx.beginPath(); // first spike
             ctx.moveTo(spikes[ctr].x, spikes[ctr].y); //starting point
             ctx.lineTo(spikes[ctr].x+(spikes[ctr].width/6), spikes[ctr].y-spikes[ctr].height);
@@ -218,9 +214,6 @@ function renderSpikes6() {
         }
     }
 }
-
-// render enemy
-
 
 // render ground
 function renderGround6() {
@@ -377,8 +370,6 @@ function openDoor6() {
 function playerAlive6() {
     hazardCollided = false;
 
-    // test for enemy collision
-
     // test for spike collision
     for (ctr=0; ctr<spikes.length; ctr++) {
         if (((spikes[ctr].x < player.x && player.x-player.width < spikes[ctr].x) || 
@@ -425,7 +416,6 @@ function endScreenSurvey6() {
 // ok here we go with the actual game
 function startSurvey6() {
     initSurvey6();
-    //startButton.style.display = "none";
     playAgainSurveyButton.hidden = true;
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
@@ -435,7 +425,6 @@ function startSurvey6() {
     createSpikes6();
     document.addEventListener("keydown",keyDown);
     document.addEventListener("keyup",keyUp);
-    // timePassed = 0;
 
     window.requestAnimationFrame(gameLoopSurvey6);
 }
@@ -443,16 +432,12 @@ function startSurvey6() {
 function gameLoopSurvey6(timeStamp) {
     // render everything
     renderCanvas6();
-    //renderLadder6();
     renderPlayer6();
     renderStarKey6();
     renderDoor6();
     renderGround6();
     renderSpikes6();
     renderPlatforms6();
-    //checkLadderClimb6();
-    // timePassed += Math.round(timeStamp / 1000);
-    // timer.innerHTML = "Timer: " + timePassed;
 
     // if player is not jumping, apply friction. otherwise apply gravity
     if (player.jump == false) {
@@ -501,7 +486,6 @@ function gameOverSurvey6() {
 var difKeyLevelSurvey = { // need start, render, gameloop?, end
     type: jsPsychGameSurvey,
     start: startSurvey6,
-    //loop: function(){},
     gameWon: isGameWon,
     verName: "difKey",
     questions: [
