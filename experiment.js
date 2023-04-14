@@ -140,12 +140,13 @@ var if_full_debrief = {
 
 var goodbye = {
   type: jsPsychHtmlKeyboardResponse,
-  stimulus: "Thanks for participating! <a href='https://app.prolific.co/submissions/complete?cc=COZ068ZS'>Click here to return to Prolific and complete the study</a>."
+  //stimulus: "Thanks for participating! <a href='https://app.prolific.co/submissions/complete?cc=COZ068ZS'>Click here to return to Prolific and complete the study</a>."
+  stimulus: "Thanks for participating! You may now close the window."
 }
 
 
-timeline.push(debrief, if_full_debrief, goodbye);
-  
+//timeline.push(debrief, if_full_debrief, goodbye);
+timeline.push(goodbye);
 
 // run the timeline
 jsPsych.run(timeline);
